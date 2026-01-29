@@ -15,8 +15,12 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Monte sua Casa - Simulador de Orcamento",
+  title: "Sua Casa no Papel - Simulador de Orcamento",
   description: "Simule o orcamento da construcao da sua casa, muro e piscina",
+  icons: {
+    icon: '/favicon.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

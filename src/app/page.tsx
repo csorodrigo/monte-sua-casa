@@ -219,7 +219,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t mt-12 py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>Monte sua Casa - Simulador de Orcamento de Construcao</p>
+          <p>Sua Casa no Papel - Simulador de Orcamento de Construcao</p>
           <p className="mt-1">Os valores sao estimativas e podem variar conforme regiao e mercado.</p>
         </div>
       </footer>
