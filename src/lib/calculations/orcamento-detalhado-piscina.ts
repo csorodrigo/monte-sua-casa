@@ -63,6 +63,7 @@ export const PRECOS_MAO_OBRA_PISCINA = {
   instalacaoSistemaFiltragem: 500.00,
   instalacaoBomba: 350.00,
   instalacaoIluminacao: 150.00,
+  limpezaGeral: 350.00,  // Limpeza geral da obra (verba)
 };
 
 export interface OrcamentoPiscinaDetalhado {
@@ -79,6 +80,7 @@ export interface MaoObraPiscinaDetalhada {
   impermeabilizacao: SecaoOrcamentoDetalhado;
   revestimento: SecaoOrcamentoDetalhado;
   equipamentos: SecaoOrcamentoDetalhado;
+  limpezaObra: SecaoOrcamentoDetalhado;
   subtotal: number;
   bdi: number;
   bdiPercentual: number;
@@ -210,9 +212,10 @@ export function calcularMaoObraPiscinaDetalhada(piscina: ConfiguracaoPiscina, es
       impermeabilizacao: secaoVazia,
       revestimento: secaoVazia,
       equipamentos: secaoVazia,
+      limpezaObra: secaoVazia,
       subtotal: 0,
       bdi: 0,
-      bdiPercentual: 15,
+      bdiPercentual: 20,
       totalGeral: 0,
     };
   }
@@ -276,13 +279,19 @@ export function calcularMaoObraPiscinaDetalhada(piscina: ConfiguracaoPiscina, es
     criarItem('4.3', 'Instalação iluminação', 'unid', qtdIluminacao, PRECOS_MAO_OBRA_PISCINA.instalacaoIluminacao * fatorEstado),
   ]);
 
+  // 5.0 LIMPEZA DA OBRA
+  const limpezaObra = criarSecao('5.0', 'LIMPEZA DA OBRA', [
+    criarItem('5.1', 'Limpeza geral', 'vb', 1, PRECOS_MAO_OBRA_PISCINA.limpezaGeral * fatorEstado),
+  ]);
+
   const subtotal =
     estrutura.subtotal +
     impermeabilizacao.subtotal +
     revestimento.subtotal +
-    equipamentos.subtotal;
+    equipamentos.subtotal +
+    limpezaObra.subtotal;
 
-  // BDI para piscina: 15% conforme planilha
+  // BDI para piscina: 20% conforme planilha Excel
   const bdiPercentual = BDI.PISCINA;
   const bdi = subtotal * (bdiPercentual / 100);
   const totalGeral = subtotal + bdi;
@@ -292,6 +301,7 @@ export function calcularMaoObraPiscinaDetalhada(piscina: ConfiguracaoPiscina, es
     impermeabilizacao,
     revestimento,
     equipamentos,
+    limpezaObra,
     subtotal: Math.round(subtotal * 100) / 100,
     bdi: Math.round(bdi * 100) / 100,
     bdiPercentual,

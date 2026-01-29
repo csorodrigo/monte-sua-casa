@@ -174,7 +174,7 @@ export function getPrecosBaseMaoObra() {
 export const BDI = {
   CASA: 14.40,      // 14.40% para casa
   MURO: 15.00,      // 15% para muro
-  PISCINA: 15.00,   // 15% para piscina
+  PISCINA: 20.00,   // 20% para piscina (conforme planilha Excel)
 };
 
 /**

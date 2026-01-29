@@ -520,7 +520,10 @@ export function RelatorioDetalhado({ relatorio }: RelatorioDetalhadoProps) {
               <SecaoTabela secao={relatorio.maoObraCasa.esquadriasFerragens} />
               <SecaoTabela secao={relatorio.maoObraCasa.cobertura} />
               <SecaoTabela secao={relatorio.maoObraCasa.revestimentos} />
-              <SecaoTabela secao={relatorio.maoObraCasa.instalacoes} />
+              <SecaoTabela secao={relatorio.maoObraCasa.instalacaoHidraulica} />
+              <SecaoTabela secao={relatorio.maoObraCasa.instalacaoSanitaria} />
+              <SecaoTabela secao={relatorio.maoObraCasa.instalacaoEletrica} />
+              <SecaoTabela secao={relatorio.maoObraCasa.gasGlp} />
               <SecaoTabela secao={relatorio.maoObraCasa.pintura} />
               {relatorio.maoObraCasa.churrasqueira && relatorio.maoObraCasa.churrasqueira.subtotal > 0 && (
                 <SecaoTabela secao={relatorio.maoObraCasa.churrasqueira} />
@@ -639,6 +642,7 @@ export function RelatorioDetalhado({ relatorio }: RelatorioDetalhadoProps) {
               <SecaoTabela secao={relatorio.maoObraPiscina.impermeabilizacao} />
               <SecaoTabela secao={relatorio.maoObraPiscina.revestimento} />
               <SecaoTabela secao={relatorio.maoObraPiscina.equipamentos} />
+              <SecaoTabela secao={relatorio.maoObraPiscina.limpezaObra} />
               <Card className="mb-4">
                 <CardContent className="py-4">
                   <div className="space-y-2">
