@@ -265,8 +265,10 @@ export async function arquivoExiste(tipo: string): Promise<boolean> {
 /**
  * Converte preços JSON para formato usado nos cálculos (TypeScript)
  */
-export function converterParaFormatoCalculo(dados: ArquivoPrecos): Record<string, Record<string, number>> {
-  const resultado: Record<string, Record<string, number>> = {};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function converterParaFormatoCalculo(dados: ArquivoPrecos): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const resultado: Record<string, any> = {};
 
   for (const [secaoKey, secao] of Object.entries(dados.secoes)) {
     if (secao.itens) {
@@ -281,9 +283,7 @@ export function converterParaFormatoCalculo(dados: ArquivoPrecos): Record<string
       for (const [subKey, subSecao] of Object.entries(secao.subSecoes)) {
         resultado[secaoKey][subKey] = {};
         for (const [itemKey, item] of Object.entries(subSecao.itens)) {
-          (resultado[secaoKey] as Record<string, Record<string, number>>)[subKey] =
-            (resultado[secaoKey] as Record<string, Record<string, number>>)[subKey] || {};
-          (resultado[secaoKey] as Record<string, Record<string, number>>)[subKey][itemKey] = item.preco;
+          resultado[secaoKey][subKey][itemKey] = item.preco;
         }
       }
     }
