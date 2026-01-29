@@ -108,7 +108,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // 3.2 BALDRAME E ALVENARIA DE ELEVAÇÃO
   // =============================================
   const volumeAlvenariaPedra = perimetroExterno * 0.3 * 0.3;
-  const volumeCinta = perimetroExterno * 0.1 * 0.1;
+  const _volumeCinta = perimetroExterno * 0.1 * 0.1; // Para referência futura
   const areaImpermeabilizacao = perimetroExterno * 0.5;
 
   const baldrameAlvenaria = criarSecao('3.2', 'BALDRAME E ALVENARIA DE ELEVAÇÃO', [
@@ -136,7 +136,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // 3.4 ESQUADRIAS E FERRAGENS
   // =============================================
   const qtdPortasInternas = qtdQuartos + qtdBanheiros + 2;
-  const areaJanelas = (qtdQuartos + qtdBanheiros + 2) * 1.5;
+  const _areaJanelas = (qtdQuartos + qtdBanheiros + 2) * 1.5; // Para referência futura
 
   const esquadriasFerragens = criarSecao('3.4', 'ESQUADRIAS E FERRAGENS', [
     criarItem('3.4.1', 'Instalação porta entrada', 'unid', 1, P.esquadriasFerragens.portaEntradaDecorativa * fatorEstado),
@@ -155,7 +155,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // 3.6 REVESTIMENTOS (com sub-seções)
   // =============================================
   const areaCeramicaParede = (qtdBanheiros * 12) + 8;
-  const qtdSoleiras = qtdQuartos + qtdBanheiros + 3;
+  const _qtdSoleiras = qtdQuartos + qtdBanheiros + 3; // Para referência futura
 
   // 3.6.1 PAREDE
   const revestimentosParede = criarSecao('3.6.1', 'PAREDE', [
@@ -266,7 +266,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // =============================================
   const areaPinturaInterna = areaParedes * 0.6 + areaTotal;
   const areaPinturaExterna = areaParedes * 0.4;
-  const areaPinturaTotal = areaPinturaInterna + areaPinturaExterna;
+  const _areaPinturaTotal = areaPinturaInterna + areaPinturaExterna; // Para referência futura
 
   const pintura = criarSecao('3.11', 'PINTURA', [
     criarItem('3.11.2', 'Textura externa', 'm²', areaPinturaExterna, P.pintura.texturaExterna * fatorEstado * mult),

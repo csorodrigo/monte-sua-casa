@@ -53,7 +53,7 @@ interface ItemLinha {
 
 export function TabelaPrecos({
   secoes,
-  tipo,
+  tipo: _tipo, // eslint-disable-line @typescript-eslint/no-unused-vars
   onAtualizarPreco,
   onRemoverItem,
   onAdicionarItem

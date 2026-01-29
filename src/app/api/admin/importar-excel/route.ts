@@ -4,8 +4,7 @@ import {
   salvarPrecos,
   lerConfiguracao,
   salvarConfiguracao,
-  ArquivoPrecos,
-  ConfiguracaoGeral
+  ArquivoPrecos
 } from '@/lib/admin/precos-json';
 import * as XLSX from 'xlsx';
 
@@ -235,7 +234,7 @@ function parsearAba(
     }
 
     // Detecta item (tem código numérico e preço)
-    const codigo = String(linha[0] || '');
+    const _codigo = String(linha[0] || ''); // eslint-disable-line @typescript-eslint/no-unused-vars
     const descricao = String(linha[colDescricao] || '').trim();
     const unidade = String(linha[colUnidade] || '').trim();
     const precoRaw = linha[colPreco];

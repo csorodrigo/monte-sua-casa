@@ -14,13 +14,14 @@ import {
   Eye
 } from 'lucide-react';
 
-interface ItemPreview {
-  secaoKey: string;
-  itemKey: string;
-  descricao: string;
-  unidade: string;
-  preco: number;
-}
+// Interface for future use when displaying detailed preview
+// interface ItemPreview {
+//   secaoKey: string;
+//   itemKey: string;
+//   descricao: string;
+//   unidade: string;
+//   preco: number;
+// }
 
 interface ResultadoParsing {
   tipo: string;

@@ -42,7 +42,7 @@ interface Estatisticas {
 
 export default function AdminDashboard() {
   const { senha } = useAdminContext();
-  const [config, setConfig] = useState<ConfiguracaoGeral | null>(null);
+  const [config] = useState<ConfiguracaoGeral | null>(null);
   const [estatisticas, setEstatisticas] = useState<Estatisticas | null>(null);
   const [carregando, setCarregando] = useState(true);
 
