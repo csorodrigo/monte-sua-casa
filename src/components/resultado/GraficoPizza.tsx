@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, Sector } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { BreakdownOrcamento } from '@/types';
 import { formatarMoeda } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -37,38 +37,6 @@ const CORES_DARK = [
   '#f472b6', // pink-400
 ];
 
-// Custom active shape for hover effect
-const renderActiveShape = (props: any) => {
-  const {
-    cx, cy, innerRadius, outerRadius, startAngle, endAngle,
-    fill, payload, percent, value,
-  } = props;
-
-  return (
-    <g>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius + 8}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-        style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))' }}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 12}
-        outerRadius={outerRadius + 14}
-        fill={fill}
-      />
-    </g>
-  );
-};
-
 export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: GraficoPizzaProps) {
   const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
 
@@ -91,7 +59,7 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
     corDark: CORES_DARK[i % CORES_DARK.length],
   }));
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
 
@@ -99,7 +67,16 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
     setActiveIndex(undefined);
   };
 
-  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
+  interface TooltipPayload {
+    payload: {
+      nome: string;
+      valor: number;
+      porcentagem: string;
+      cor: string;
+    };
+  }
+
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: TooltipPayload[] }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -149,8 +126,6 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
                   fill="#8884d8"
                   dataKey="valor"
                   nameKey="nome"
-                  activeIndex={activeIndex}
-                  activeShape={renderActiveShape}
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
                   onClick={(_, index) => {

@@ -72,7 +72,7 @@ export function FadeIn({
       transition={{
         duration,
         delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: [0.25, 0.1, 0.25, 1] as const,
       }}
       className={className}
     >
@@ -124,7 +124,7 @@ export function StaggerItem({ children, className = '' }: StaggerItemProps) {
   return (
     <motion.div
       variants={fadeInUp}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
       className={className}
     >
       {children}
@@ -237,23 +237,14 @@ export function SlideIn({
   direction = 'right',
   className = '',
 }: SlideInProps) {
-  const slideVariants: Variants = {
-    left: {
-      hidden: { x: '-100%', opacity: 0 },
-      visible: { x: 0, opacity: 1 },
-    },
-    right: {
-      hidden: { x: '100%', opacity: 0 },
-      visible: { x: 0, opacity: 1 },
-    },
-    top: {
-      hidden: { y: '-100%', opacity: 0 },
-      visible: { y: 0, opacity: 1 },
-    },
-    bottom: {
-      hidden: { y: '100%', opacity: 0 },
-      visible: { y: 0, opacity: 1 },
-    },
+  const getVariants = (): Variants => {
+    const configs = {
+      left: { hidden: { x: '-100%', opacity: 0 }, visible: { x: 0, opacity: 1 } },
+      right: { hidden: { x: '100%', opacity: 0 }, visible: { x: 0, opacity: 1 } },
+      top: { hidden: { y: '-100%', opacity: 0 }, visible: { y: 0, opacity: 1 } },
+      bottom: { hidden: { y: '100%', opacity: 0 }, visible: { y: 0, opacity: 1 } },
+    };
+    return configs[direction];
   };
 
   return (
@@ -263,8 +254,8 @@ export function SlideIn({
           initial="hidden"
           animate="visible"
           exit="hidden"
-          variants={slideVariants[direction]}
-          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          variants={getVariants()}
+          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
           className={className}
         >
           {children}
@@ -286,7 +277,7 @@ export function PageTransition({ children, className = '' }: PageTransitionProps
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
       className={className}
     >
       {children}

@@ -68,7 +68,6 @@ export async function POST(request: NextRequest) {
     const qtdPilares = Math.max(4, Math.ceil(areaTotal / 12));
 
     // Área do terreno (estimativa para muro)
-    const comprimentoMuro = dados.muro.frente + dados.muro.fundo + dados.muro.direita + dados.muro.esquerda;
     const areaTerreno = dados.muro.incluir
       ? (dados.muro.frente * dados.muro.direita) // Aproximação
       : 150; // Valor padrão

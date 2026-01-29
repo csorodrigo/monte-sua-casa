@@ -1,6 +1,6 @@
 // Orçamento detalhado do Muro - Baseado na planilha original
 
-import { ConfiguracaoMuro, Estado, PadraoAcabamento } from '@/types';
+import { ConfiguracaoMuro, Estado } from '@/types';
 import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado } from './orcamento-detalhado-casa';
 
 export const PRECOS_MURO = {

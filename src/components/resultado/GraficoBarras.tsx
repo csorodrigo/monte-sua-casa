@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell,
 } from 'recharts';
 import { BreakdownOrcamento } from '@/types';
 import { formatarMoeda } from '@/lib/utils';

@@ -21,7 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FAB, ScrollToTopFAB } from '@/components/ui/fab';
 import { PageSkeleton } from '@/components/ui/skeletons';
-import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
+import { FadeIn } from '@/components/ui/motion';
 import { FileText, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 

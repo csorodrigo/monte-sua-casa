@@ -124,7 +124,6 @@ export function PercentChangeBadge({
 }: PercentChangeBadgeProps) {
   const isPositive = value > 0;
   const isNegative = value < 0;
-  const isNeutral = value === 0;
 
   let status: StatusType = 'neutral';
   let icon: React.ReactNode = <Minus className="h-3 w-3" />;

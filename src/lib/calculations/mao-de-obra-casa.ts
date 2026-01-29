@@ -1,10 +1,7 @@
 // Mão de Obra detalhada da Casa - Baseado na planilha original
 
 import { Estado, PadraoAcabamento } from '@/types';
-import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado, PRECOS_CASA } from './orcamento-detalhado-casa';
-
-// Preços de mão de obra (variação de 0.79% conforme planilha)
-const VARIACAO_MAO_OBRA = 0.79;
+import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado } from './orcamento-detalhado-casa';
 
 export const PRECOS_MAO_OBRA_CASA = {
   // 3.1 MOVIMENTO DE TERRA

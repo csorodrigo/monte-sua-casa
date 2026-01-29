@@ -1,6 +1,6 @@
 // Orçamento detalhado da Casa - Baseado na planilha original
 
-import { Comodo, TipoTelhado, TipoTijolo, PadraoAcabamento, Estado, ConfiguracaoReboco } from '@/types';
+import { TipoTelhado, TipoTijolo, PadraoAcabamento, ConfiguracaoReboco } from '@/types';
 import { ALVENARIA } from './constants';
 
 // Preços unitários baseados na planilha (SINAPI/mercado)
