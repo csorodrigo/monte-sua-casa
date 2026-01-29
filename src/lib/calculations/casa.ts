@@ -13,7 +13,6 @@ import {
   BreakdownOrcamento,
 } from '@/types';
 import { PRECOS, DESPERDICIO, TELHADO, ALVENARIA } from './constants';
-import { getCUBBase } from '@/lib/configuracoes';
 import {
   areaTotalConstruida,
   areaTotalParedes,
