@@ -205,7 +205,7 @@ function calcularAcabamento(
  * Calcula orcamento de mao de obra
  * Usa CUB do estado como base
  */
-function calcularMaoObra(
+function calcularMaoObraCasa(
   areaTotal: number,
   estado: Estado,
   padraoAcabamento: PadraoAcabamento
@@ -220,10 +220,10 @@ function calcularMaoObra(
   const custoAjustado = custoBasePorM2 * fatorEstado * padraoAcabamento.multiplicadorPreco;
 
   const itens: ItemOrcamento[] = [
-    criarItem(`Mao de obra (${estado.sigla})`, areaTotal, 'm2', custoAjustado),
+    criarItem(`Mao de obra casa (${estado.sigla})`, areaTotal, 'm2', custoAjustado),
   ];
 
-  return criarSecao('Mao de Obra', itens);
+  return criarSecao('M.O. Casa', itens);
 }
 
 /**
@@ -246,7 +246,7 @@ export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
   const telhado = calcularTelhadoOrcamento(areaTelhadoCalc, tipoTelhado);
   const rebocoSecao = calcularReboco(areaParedes, reboco);
   const acabamento = calcularAcabamento(areaTotal, areaParedes, padraoAcabamento);
-  const maoObra = calcularMaoObra(areaTotal, estado, padraoAcabamento);
+  const maoObraCasa = calcularMaoObraCasa(areaTotal, estado, padraoAcabamento);
 
   // Totais
   const totalMateriais =
@@ -257,7 +257,7 @@ export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
     rebocoSecao.subtotal +
     acabamento.subtotal;
 
-  const totalMaoObraValor = maoObra.subtotal;
+  const totalMaoObraValor = maoObraCasa.subtotal;
   const totalGeral = totalMateriais + totalMaoObraValor;
 
   return {
@@ -274,7 +274,7 @@ export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
       telhado,
       reboco: rebocoSecao,
       acabamento,
-      maoObra,
+      maoObraCasa,
     },
   };
 }

@@ -114,7 +114,9 @@ export function BreakdownTable({ breakdown }: BreakdownTableProps) {
     breakdown.telhado,
     breakdown.reboco,
     breakdown.acabamento,
-    breakdown.maoObra,
+    breakdown.maoObraCasa,
+    breakdown.maoObraMuro,
+    breakdown.maoObraPiscina,
     breakdown.muro,
     breakdown.piscina,
   ].filter((s): s is SecaoOrcamento => s !== undefined && s.itens.length > 0);

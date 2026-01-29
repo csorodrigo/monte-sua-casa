@@ -65,7 +65,7 @@ export function CardTotal({
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       {cards.map((card, index) => (
         <motion.div
           key={card.title}
@@ -123,11 +123,11 @@ export function CardTotal({
                 formatter={(v: number) => formatarMoeda(v)}
               />
             </div>
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 mt-2">
               <span className="text-xs text-white/80">
                 {formatarMoeda(custoPorM2)}/m²
               </span>
-              <CostBadge costPerM2={custoPorM2} className="text-xs" />
+              <CostBadge costPerM2={custoPorM2} className="text-[10px]" />
             </div>
           </CardContent>
         </Card>

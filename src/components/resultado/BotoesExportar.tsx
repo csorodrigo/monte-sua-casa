@@ -20,7 +20,9 @@ export function BotoesExportar({ resultado }: BotoesExportarProps) {
       resultado.breakdown.telhado,
       resultado.breakdown.reboco,
       resultado.breakdown.acabamento,
-      resultado.breakdown.maoObra,
+      resultado.breakdown.maoObraCasa,
+      resultado.breakdown.maoObraMuro,
+      resultado.breakdown.maoObraPiscina,
       resultado.breakdown.muro,
       resultado.breakdown.piscina,
     ].filter(s => s && s.itens.length > 0);

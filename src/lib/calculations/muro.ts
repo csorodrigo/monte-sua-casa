@@ -48,7 +48,8 @@ function criarItem(
  */
 export function calcularOrcamentoMuro(params: ParametrosMuro): {
   resultado: ResultadoMuro;
-  secao: SecaoOrcamento;
+  secaoMateriais: SecaoOrcamento;
+  secaoMaoObra: SecaoOrcamento;
 } {
   const { muro, estado } = params;
 
@@ -60,8 +61,13 @@ export function calcularOrcamentoMuro(params: ParametrosMuro): {
         totalMaoObra: 0,
         total: 0,
       },
-      secao: {
-        nome: 'Muro',
+      secaoMateriais: {
+        nome: 'Mat. Muro',
+        itens: [],
+        subtotal: 0,
+      },
+      secaoMaoObra: {
+        nome: 'M.O. Muro',
         itens: [],
         subtotal: 0,
       },
@@ -116,8 +122,6 @@ export function calcularOrcamentoMuro(params: ParametrosMuro): {
 
   const itemMaoObra = criarItem(`Mao de obra muro (${estado.sigla})`, areaTotal, 'm2', custoMaoObraPorM2);
 
-  const todosItens = [...itensMaterial, itemMaoObra];
-
   return {
     resultado: {
       areaTotal: Math.round(areaTotal * 100) / 100,
@@ -125,10 +129,15 @@ export function calcularOrcamentoMuro(params: ParametrosMuro): {
       totalMaoObra: Math.round(totalMaoObra * 100) / 100,
       total: Math.round((totalMateriais + totalMaoObra) * 100) / 100,
     },
-    secao: {
-      nome: 'Muro',
-      itens: todosItens,
-      subtotal: Math.round((totalMateriais + totalMaoObra) * 100) / 100,
+    secaoMateriais: {
+      nome: 'Mat. Muro',
+      itens: itensMaterial,
+      subtotal: Math.round(totalMateriais * 100) / 100,
+    },
+    secaoMaoObra: {
+      nome: 'M.O. Muro',
+      itens: [itemMaoObra],
+      subtotal: Math.round(totalMaoObra * 100) / 100,
     },
   };
 }

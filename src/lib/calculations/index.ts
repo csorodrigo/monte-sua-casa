@@ -83,11 +83,13 @@ export function calcularOrcamentoCompleto(
   const breakdown = { ...resultadoCasa.breakdown };
 
   if (dados.muro.incluir) {
-    breakdown.muro = resultadoMuro.secao;
+    breakdown.muro = resultadoMuro.secaoMateriais;
+    breakdown.maoObraMuro = resultadoMuro.secaoMaoObra;
   }
 
   if (dados.piscina.incluir) {
-    breakdown.piscina = resultadoPiscina.secao;
+    breakdown.piscina = resultadoPiscina.secaoMateriais;
+    breakdown.maoObraPiscina = resultadoPiscina.secaoMaoObra;
   }
 
   // Calcular totais gerais

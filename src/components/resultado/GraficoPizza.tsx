@@ -47,9 +47,11 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
     { nome: 'Telhado', valor: breakdown.telhado.subtotal },
     { nome: 'Reboco', valor: breakdown.reboco.subtotal },
     { nome: 'Acabamento', valor: breakdown.acabamento.subtotal },
-    { nome: 'Mao de Obra', valor: breakdown.maoObra.subtotal },
-    ...(breakdown.muro ? [{ nome: 'Muro', valor: breakdown.muro.subtotal }] : []),
-    ...(breakdown.piscina ? [{ nome: 'Piscina', valor: breakdown.piscina.subtotal }] : []),
+    { nome: 'M.O. Casa', valor: breakdown.maoObraCasa.subtotal },
+    ...(breakdown.maoObraMuro ? [{ nome: 'M.O. Muro', valor: breakdown.maoObraMuro.subtotal }] : []),
+    ...(breakdown.maoObraPiscina ? [{ nome: 'M.O. Piscina', valor: breakdown.maoObraPiscina.subtotal }] : []),
+    ...(breakdown.muro ? [{ nome: 'Mat. Muro', valor: breakdown.muro.subtotal }] : []),
+    ...(breakdown.piscina ? [{ nome: 'Mat. Piscina', valor: breakdown.piscina.subtotal }] : []),
   ].filter(d => d.valor > 0);
 
   const dadosComPorcentagem = dados.map((d, i) => ({
@@ -156,7 +158,7 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
           </div>
 
           {/* Legend grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-4">
             {dadosComPorcentagem.map((d, i) => (
               <motion.div
                 key={i}
@@ -174,7 +176,7 @@ export function GraficoPizza({ breakdown, totalGeral, onCategoryClick }: Grafico
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: d.cor }}
                 />
-                <span className="flex-1 truncate">{d.nome}</span>
+                <span className="flex-1 text-sm">{d.nome}</span>
                 <span className="font-medium text-xs text-muted-foreground">
                   {d.porcentagem}%
                 </span>

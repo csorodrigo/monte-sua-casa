@@ -53,21 +53,31 @@ export function GraficoBarras({ breakdown, className }: GraficoBarrasProps) {
       maoObra: 0,
     },
     {
-      nome: 'Mao de Obra',
+      nome: 'M.O. Casa',
       materiais: 0,
-      maoObra: breakdown.maoObra.subtotal,
+      maoObra: breakdown.maoObraCasa.subtotal,
     },
+    ...(breakdown.maoObraMuro ? [{
+      nome: 'M.O. Muro',
+      materiais: 0,
+      maoObra: breakdown.maoObraMuro.subtotal,
+    }] : []),
+    ...(breakdown.maoObraPiscina ? [{
+      nome: 'M.O. Piscina',
+      materiais: 0,
+      maoObra: breakdown.maoObraPiscina.subtotal,
+    }] : []),
     ...(breakdown.muro ? [{
-      nome: 'Muro',
+      nome: 'Mat. Muro',
       materiais: breakdown.muro.subtotal,
       maoObra: 0,
     }] : []),
     ...(breakdown.piscina ? [{
-      nome: 'Piscina',
+      nome: 'Mat. Piscina',
       materiais: breakdown.piscina.subtotal,
       maoObra: 0,
     }] : []),
-  ];
+  ].filter(d => d.materiais > 0 || d.maoObra > 0);
 
   const CustomTooltip = ({ active, payload, label }: {
     active?: boolean;

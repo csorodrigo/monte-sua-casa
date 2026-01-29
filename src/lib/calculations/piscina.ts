@@ -58,7 +58,8 @@ function criarItem(
  */
 export function calcularOrcamentoPiscina(params: ParametrosPiscina): {
   resultado: ResultadoPiscina;
-  secao: SecaoOrcamento;
+  secaoMateriais: SecaoOrcamento;
+  secaoMaoObra: SecaoOrcamento;
 } {
   const { piscina, estado } = params;
 
@@ -71,8 +72,13 @@ export function calcularOrcamentoPiscina(params: ParametrosPiscina): {
         totalMaoObra: 0,
         total: 0,
       },
-      secao: {
-        nome: 'Piscina',
+      secaoMateriais: {
+        nome: 'Mat. Piscina',
+        itens: [],
+        subtotal: 0,
+      },
+      secaoMaoObra: {
+        nome: 'M.O. Piscina',
         itens: [],
         subtotal: 0,
       },
@@ -128,8 +134,6 @@ export function calcularOrcamentoPiscina(params: ParametrosPiscina): {
 
   const itemMaoObra = criarItem(`Mao de obra piscina (${estado.sigla})`, volume, 'm3', custoMaoObraPorM3);
 
-  const todosItens = [...itensMaterial, itemMaoObra];
-
   return {
     resultado: {
       areaSuperficie: Math.round(areaSuperficie * 100) / 100,
@@ -138,10 +142,15 @@ export function calcularOrcamentoPiscina(params: ParametrosPiscina): {
       totalMaoObra: Math.round(totalMaoObra * 100) / 100,
       total: Math.round((totalMateriais + totalMaoObra) * 100) / 100,
     },
-    secao: {
-      nome: 'Piscina',
-      itens: todosItens,
-      subtotal: Math.round((totalMateriais + totalMaoObra) * 100) / 100,
+    secaoMateriais: {
+      nome: 'Mat. Piscina',
+      itens: itensMaterial,
+      subtotal: Math.round(totalMateriais * 100) / 100,
+    },
+    secaoMaoObra: {
+      nome: 'M.O. Piscina',
+      itens: [itemMaoObra],
+      subtotal: Math.round(totalMaoObra * 100) / 100,
     },
   };
 }

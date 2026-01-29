@@ -62,7 +62,9 @@ export interface BreakdownOrcamento {
   telhado: SecaoOrcamento;
   reboco: SecaoOrcamento;
   acabamento: SecaoOrcamento;
-  maoObra: SecaoOrcamento;
+  maoObraCasa: SecaoOrcamento;
+  maoObraMuro?: SecaoOrcamento;
+  maoObraPiscina?: SecaoOrcamento;
   muro?: SecaoOrcamento;
   piscina?: SecaoOrcamento;
 }
