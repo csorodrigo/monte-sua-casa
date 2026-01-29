@@ -19,7 +19,6 @@ import { BotoesExportar } from '@/components/resultado/BotoesExportar';
 import { RelatorioDetalhado } from '@/components/resultado/RelatorioDetalhado';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { FAB, ScrollToTopFAB } from '@/components/ui/fab';
 import { PageSkeleton } from '@/components/ui/skeletons';
 import { FadeIn } from '@/components/ui/motion';
@@ -140,16 +139,13 @@ export default function HomePage() {
               >
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <h2 className="text-xl font-bold">Resultado do Orcamento</h2>
-                  <div className="flex gap-2 flex-wrap">
-                    <Button
-                      variant="outline"
-                      onClick={simulacao.calcularRelatorioDetalhado}
-                      disabled={simulacao.carregandoRelatorio}
-                      className="gap-2"
-                    >
-                      <FileText className="h-4 w-4" />
-                      {simulacao.carregandoRelatorio ? 'Gerando...' : 'Ver Relatorio Detalhado'}
-                    </Button>
+                  <div className="flex gap-2 flex-wrap items-center">
+                    {simulacao.carregandoRelatorio && (
+                      <span className="text-sm text-muted-foreground flex items-center gap-2">
+                        <FileText className="h-4 w-4 animate-pulse" />
+                        Gerando relatorios...
+                      </span>
+                    )}
                     <BotoesExportar resultado={simulacao.resultado} />
                   </div>
                 </div>

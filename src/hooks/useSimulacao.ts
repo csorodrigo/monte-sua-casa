@@ -315,12 +315,13 @@ export function useSimulacao(): UseSimulacaoReturn {
     setResultado(null);
   }, []);
 
-  // Calcular orcamento
+  // Calcular orcamento e relatorio detalhado automaticamente
   const calcular = useCallback(async () => {
     setCarregando(true);
     setErro(null);
 
     try {
+      // Primeiro calcula o orcamento basico
       const response = await fetch('/api/calcular', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -331,7 +332,28 @@ export function useSimulacao(): UseSimulacaoReturn {
 
       if (result.success) {
         setResultado(result.data);
-        setRelatorioDetalhado(null); // Limpa relatorio ao recalcular
+
+        // Gera automaticamente o relatorio detalhado
+        setCarregandoRelatorio(true);
+        try {
+          const relatorioResponse = await fetch('/api/relatorio-completo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados),
+          });
+
+          const relatorioResult = await relatorioResponse.json();
+
+          if (relatorioResult.success) {
+            setRelatorioDetalhado(relatorioResult.data);
+          } else {
+            console.error('Erro ao gerar relatorio:', relatorioResult.error);
+          }
+        } catch (relatorioError) {
+          console.error('Erro ao gerar relatorio detalhado:', relatorioError);
+        } finally {
+          setCarregandoRelatorio(false);
+        }
       } else {
         setErro(result.error || 'Erro ao calcular');
       }
