@@ -67,6 +67,13 @@ export async function POST(request: NextRequest) {
     // Quantidade de pilares (1 a cada 12m²)
     const qtdPilares = Math.max(4, Math.ceil(areaTotal / 12));
 
+    // Novos parâmetros para mão de obra conforme planilha Excel
+    const qtdComodos = dados.comodos.length || 5;
+    const qtdPortas = qtdQuartos + qtdBanheiros + 2; // portas internas
+    const larguraCasa = dimensoes.largura;
+    const comprimentoCasa = dimensoes.comprimento;
+    const profundidadeFundos = dados.muro.fundo || 6; // metros do fundo do lote
+
     // Área do terreno (estimativa para muro)
     const areaTerreno = dados.muro.incluir
       ? (dados.muro.frente * dados.muro.direita) // Aproximação
@@ -104,6 +111,12 @@ export async function POST(request: NextRequest) {
       estado,
       padraoAcabamento,
       incluirChurrasqueira: dados.incluirChurrasqueira ?? false,
+      // Novos parâmetros conforme planilha Excel
+      qtdComodos,
+      qtdPortas,
+      larguraCasa,
+      comprimentoCasa,
+      profundidadeFundos,
     });
 
     // ========================================
