@@ -1,101 +1,233 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useSimulacao } from '@/hooks/useSimulacao';
+import { SeletorEstado } from '@/components/simulador/SeletorEstado';
+import { ConfigReboco } from '@/components/simulador/ConfigReboco';
+import { GridComodos } from '@/components/simulador/GridComodos';
+import { SeletorTelhado } from '@/components/simulador/SeletorTelhado';
+import { SeletorTijolo } from '@/components/simulador/SeletorTijolo';
+import { SeletorPadrao } from '@/components/simulador/SeletorPadrao';
+import { SecaoMuro } from '@/components/simulador/SecaoMuro';
+import { SecaoPiscina } from '@/components/simulador/SecaoPiscina';
+import { ResumoLateral } from '@/components/simulador/ResumoLateral';
+import { CardTotal } from '@/components/resultado/CardTotal';
+import { BreakdownTable } from '@/components/resultado/BreakdownTable';
+import { GraficoPizza } from '@/components/resultado/GraficoPizza';
+import { GraficoBarras } from '@/components/resultado/GraficoBarras';
+import { BotoesExportar } from '@/components/resultado/BotoesExportar';
+import { RelatorioDetalhado } from '@/components/resultado/RelatorioDetalhado';
+import { Header } from '@/components/layout/Header';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FAB, ScrollToTopFAB } from '@/components/ui/fab';
+import { PageSkeleton } from '@/components/ui/skeletons';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/motion';
+import { FileText, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+export default function HomePage() {
+  const simulacao = useSimulacao();
+
+  if (!simulacao.dadosIniciais) {
+    return <PageSkeleton />;
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <Header />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="container mx-auto px-4 py-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+          {/* Coluna do Formulario */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Configuracoes Gerais */}
+            <FadeIn delay={0.1}>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                      <Settings className="h-4 w-4" />
+                    </div>
+                    <CardTitle>Configuracoes Gerais</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <SeletorEstado
+                    estados={simulacao.dadosIniciais.estados}
+                    valor={simulacao.dados.estadoId}
+                    onChange={simulacao.setEstado}
+                  />
+                  <SeletorPadrao
+                    padroes={simulacao.dadosIniciais.padroesAcabamento}
+                    valor={simulacao.dados.padraoAcabamentoId}
+                    onChange={simulacao.setPadraoAcabamento}
+                  />
+                  <SeletorTelhado
+                    tipos={simulacao.dadosIniciais.tiposTelhado}
+                    valor={simulacao.dados.tipoTelhadoId}
+                    onChange={simulacao.setTipoTelhado}
+                  />
+                  <SeletorTijolo
+                    tipos={simulacao.dadosIniciais.tiposTijolo}
+                    valor={simulacao.dados.tipoTijoloId}
+                    onChange={simulacao.setTipoTijolo}
+                  />
+                  <ConfigReboco
+                    reboco={simulacao.dados.reboco}
+                    onChangeExterno={simulacao.setRebocoExterno}
+                    onChangeInterno={simulacao.setRebocoInterno}
+                  />
+                </CardContent>
+              </Card>
+            </FadeIn>
+
+            {/* Comodos */}
+            <FadeIn delay={0.2}>
+              <GridComodos
+                comodos={simulacao.dados.comodos}
+                onAdicionar={simulacao.adicionarComodo}
+                onRemover={simulacao.removerComodo}
+                onAtualizar={simulacao.atualizarComodo}
+              />
+            </FadeIn>
+
+            {/* Muro */}
+            <FadeIn delay={0.3}>
+              <SecaoMuro
+                muro={simulacao.dados.muro}
+                onChangeIncluir={simulacao.setIncluirMuro}
+                onChangeFrente={simulacao.setMuroFrente}
+                onChangeFundo={simulacao.setMuroFundo}
+                onChangeDireita={simulacao.setMuroDireita}
+                onChangeEsquerda={simulacao.setMuroEsquerda}
+                onChangeAltura={simulacao.setMuroAltura}
+              />
+            </FadeIn>
+
+            {/* Piscina */}
+            <FadeIn delay={0.4}>
+              <SecaoPiscina
+                piscina={simulacao.dados.piscina}
+                onChangeIncluir={simulacao.setIncluirPiscina}
+                onChangeLargura={simulacao.setPiscinaLargura}
+                onChangeComprimento={simulacao.setPiscinaComprimento}
+                onChangeProfundidade={simulacao.setPiscinaProfundidade}
+              />
+            </FadeIn>
+
+            {/* Resultado Detalhado */}
+            {simulacao.resultado && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-6 print:block"
+              >
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <h2 className="text-xl font-bold">Resultado do Orcamento</h2>
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      variant="outline"
+                      onClick={simulacao.calcularRelatorioDetalhado}
+                      disabled={simulacao.carregandoRelatorio}
+                      className="gap-2"
+                    >
+                      <FileText className="h-4 w-4" />
+                      {simulacao.carregandoRelatorio ? 'Gerando...' : 'Ver Relatorio Detalhado'}
+                    </Button>
+                    <BotoesExportar resultado={simulacao.resultado} />
+                  </div>
+                </div>
+
+                <CardTotal
+                  areaTotalConstruida={simulacao.resultado.areaTotalConstruida}
+                  totalMateriais={simulacao.resultado.totalMateriais}
+                  totalMaoObra={simulacao.resultado.totalMaoObra}
+                  totalGeral={simulacao.resultado.totalGeral}
+                />
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                  <GraficoPizza
+                    breakdown={simulacao.resultado.breakdown}
+                    totalGeral={simulacao.resultado.totalGeral}
+                  />
+                  <GraficoBarras
+                    breakdown={simulacao.resultado.breakdown}
+                  />
+                </div>
+
+                <FadeIn delay={0.2}>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Detalhamento por Categoria</h3>
+                    <BreakdownTable breakdown={simulacao.resultado.breakdown} />
+                  </div>
+                </FadeIn>
+
+                {/* Relatorio Detalhado Completo */}
+                {simulacao.relatorioDetalhado && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <RelatorioDetalhado relatorio={simulacao.relatorioDetalhado} />
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </div>
+
+          {/* Coluna do Resumo */}
+          <div className="lg:col-span-1">
+            <FadeIn delay={0.2} direction="right">
+              <ResumoLateral
+                resultado={simulacao.resultado}
+                carregando={simulacao.carregando}
+                onCalcular={simulacao.calcular}
+                onSalvar={simulacao.salvar}
+                onLimpar={simulacao.limpar}
+              />
+            </FadeIn>
+
+            {simulacao.erro && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
+                <Card className="mt-4 border-destructive">
+                  <CardContent className="pt-4">
+                    <p className="text-destructive text-sm">{simulacao.erro}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="border-t mt-12 py-6">
+        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+          <p>Monte sua Casa - Simulador de Orcamento de Construcao</p>
+          <p className="mt-1">Os valores sao estimativas e podem variar conforme regiao e mercado.</p>
+        </div>
       </footer>
+
+      {/* FAB for mobile */}
+      <FAB
+        onClick={simulacao.calcular}
+        loading={simulacao.carregando}
+        label="Calcular"
+      />
+
+      {/* Scroll to top */}
+      <ScrollToTopFAB />
     </div>
   );
 }

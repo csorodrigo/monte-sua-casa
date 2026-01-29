@@ -1,0 +1,103 @@
+// Schema Prisma para Monte sua Casa
+// Sistema de simulacao de orcamento de construcao
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Estados brasileiros com custos de mao de obra
+model Estado {
+  id                 Int         @id @default(autoincrement())
+  sigla              String      @unique
+  nome               String
+  custoMaoObraPorM2  Float       // Custo base de mao de obra por m2
+  simulacoes         Simulacao[]
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+}
+
+// Tipos de telhado
+model TipoTelhado {
+  id          Int         @id @default(autoincrement())
+  nome        String      @unique
+  precoPorM2  Float       // Preco por m2 de telhado
+  simulacoes  Simulacao[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// Tipos de tijolo
+model TipoTijolo {
+  id                Int         @id @default(autoincrement())
+  nome              String      @unique
+  precoUnidade      Float       // Preco unitario
+  tijolosPorM2      Int         // Quantidade de tijolos por m2
+  multiplicadorFerro Float      // Multiplicador para calculo de ferro
+  simulacoes        Simulacao[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+// Padroes de acabamento
+model PadraoAcabamento {
+  id                   Int         @id @default(autoincrement())
+  nome                 String      @unique
+  multiplicadorPreco   Float       // Multiplicador sobre o orcamento base
+  descricao            String?
+  simulacoes           Simulacao[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+// Simulacao principal
+model Simulacao {
+  id                   Int              @id @default(autoincrement())
+
+  // Relacoes
+  estadoId             Int
+  estado               Estado           @relation(fields: [estadoId], references: [id])
+  tipoTelhadoId        Int
+  tipoTelhado          TipoTelhado      @relation(fields: [tipoTelhadoId], references: [id])
+  tipoTijoloId         Int
+  tipoTijolo           TipoTijolo       @relation(fields: [tipoTijoloId], references: [id])
+  padraoAcabamentoId   Int
+  padraoAcabamento     PadraoAcabamento @relation(fields: [padraoAcabamentoId], references: [id])
+
+  // Configuracoes gerais
+  incluirRebocoExterno Boolean          @default(true)
+  incluirRebocoInterno Boolean          @default(true)
+
+  // Comodos - armazenados como JSON
+  comodos              String           // JSON com array de comodos
+
+  // Muro (opcional)
+  incluirMuro          Boolean          @default(false)
+  muroFrente           Float?
+  muroFundo            Float?
+  muroDireita          Float?
+  muroEsquerda         Float?
+  muroAltura           Float?
+
+  // Piscina (opcional)
+  incluirPiscina       Boolean          @default(false)
+  piscinaLargura       Float?
+  piscinaComprimento   Float?
+  piscinaProfundidade  Float?
+
+  // Resultados calculados
+  areaTotalConstruida  Float
+  totalMateriais       Float
+  totalMaoObra         Float
+  totalGeral           Float
+
+  // Breakdown detalhado em JSON
+  breakdown            String           // JSON com detalhes do calculo
+
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+}
