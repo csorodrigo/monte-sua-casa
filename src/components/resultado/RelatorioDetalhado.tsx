@@ -491,7 +491,12 @@ export function RelatorioDetalhado({ relatorio }: RelatorioDetalhadoProps) {
               <SecaoTabela secao={relatorio.orcamentoCasa.instalacaoHidraulica} />
               <SecaoTabela secao={relatorio.orcamentoCasa.instalacaoSanitaria} />
               <SecaoTabela secao={relatorio.orcamentoCasa.instalacaoEletrica} />
+              {relatorio.orcamentoCasa.gasGlp && <SecaoTabela secao={relatorio.orcamentoCasa.gasGlp} />}
               <SecaoTabela secao={relatorio.orcamentoCasa.pintura} />
+              {relatorio.orcamentoCasa.churrasqueira && relatorio.orcamentoCasa.churrasqueira.subtotal > 0 && (
+                <SecaoTabela secao={relatorio.orcamentoCasa.churrasqueira} />
+              )}
+              {relatorio.orcamentoCasa.limpezaObra && <SecaoTabela secao={relatorio.orcamentoCasa.limpezaObra} />}
               <Card className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
                 <CardContent className="py-4">
                   <div className="flex justify-between items-center">
@@ -517,6 +522,10 @@ export function RelatorioDetalhado({ relatorio }: RelatorioDetalhadoProps) {
               <SecaoTabela secao={relatorio.maoObraCasa.revestimentos} />
               <SecaoTabela secao={relatorio.maoObraCasa.instalacoes} />
               <SecaoTabela secao={relatorio.maoObraCasa.pintura} />
+              {relatorio.maoObraCasa.churrasqueira && relatorio.maoObraCasa.churrasqueira.subtotal > 0 && (
+                <SecaoTabela secao={relatorio.maoObraCasa.churrasqueira} />
+              )}
+              {relatorio.maoObraCasa.limpezaObra && <SecaoTabela secao={relatorio.maoObraCasa.limpezaObra} />}
               <Card className="mb-4">
                 <CardContent className="py-4">
                   <div className="space-y-2">

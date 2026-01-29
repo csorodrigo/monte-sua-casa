@@ -38,6 +38,7 @@ export interface DadosSimulacao {
   comodos: Comodo[];
   muro: ConfiguracaoMuro;
   piscina: ConfiguracaoPiscina;
+  incluirChurrasqueira: boolean;
 }
 
 export interface ItemOrcamento {

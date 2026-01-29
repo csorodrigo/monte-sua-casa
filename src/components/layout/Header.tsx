@@ -1,6 +1,7 @@
 'use client';
 
-import { Home, Calculator, FileText, Menu } from 'lucide-react';
+import Link from 'next/link';
+import { Home, Calculator, FileText, Menu, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -66,6 +67,12 @@ export function Header({ showBreadcrumb = false, currentPage = 'Simulador' }: He
               <FileText className="h-4 w-4" />
               Historico
             </Button>
+            <Link href="/admin">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Settings className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
           </nav>
 
           {/* Actions */}
@@ -98,6 +105,12 @@ export function Header({ showBreadcrumb = false, currentPage = 'Simulador' }: He
                     <FileText className="h-4 w-4" />
                     Historico
                   </Button>
+                  <Link href="/admin">
+                    <Button variant="ghost" className="justify-start gap-2 w-full">
+                      <Settings className="h-4 w-4" />
+                      Admin
+                    </Button>
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>

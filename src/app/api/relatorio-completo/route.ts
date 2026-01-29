@@ -87,6 +87,7 @@ export async function POST(request: NextRequest) {
       tipoTijolo,
       padraoAcabamento,
       reboco: dados.reboco,
+      incluirChurrasqueira: dados.incluirChurrasqueira ?? false,
     });
 
     // ========================================
@@ -102,6 +103,7 @@ export async function POST(request: NextRequest) {
       qtdQuartos,
       estado,
       padraoAcabamento,
+      incluirChurrasqueira: dados.incluirChurrasqueira ?? false,
     });
 
     // ========================================

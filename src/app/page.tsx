@@ -9,6 +9,7 @@ import { SeletorTijolo } from '@/components/simulador/SeletorTijolo';
 import { SeletorPadrao } from '@/components/simulador/SeletorPadrao';
 import { SecaoMuro } from '@/components/simulador/SecaoMuro';
 import { SecaoPiscina } from '@/components/simulador/SecaoPiscina';
+import { SecaoChurrasqueira } from '@/components/simulador/SecaoChurrasqueira';
 import { ResumoLateral } from '@/components/simulador/ResumoLateral';
 import { CardTotal } from '@/components/resultado/CardTotal';
 import { BreakdownTable } from '@/components/resultado/BreakdownTable';
@@ -118,6 +119,14 @@ export default function HomePage() {
                 onChangeLargura={simulacao.setPiscinaLargura}
                 onChangeComprimento={simulacao.setPiscinaComprimento}
                 onChangeProfundidade={simulacao.setPiscinaProfundidade}
+              />
+            </FadeIn>
+
+            {/* Churrasqueira */}
+            <FadeIn delay={0.45}>
+              <SecaoChurrasqueira
+                incluir={simulacao.dados.incluirChurrasqueira}
+                onChange={simulacao.setIncluirChurrasqueira}
               />
             </FadeIn>
 

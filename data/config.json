@@ -1,0 +1,12 @@
+{
+  "versao": "2026-01-29",
+  "ultimaAtualizacao": "2026-01-29T08:40:26.000Z",
+  "fonte": "monte-sua-casa-simulacao.xlsx",
+  "configuracoes": {
+    "fatorAjusteMateriais": 0.0079,
+    "bdiPercentual": 14.4,
+    "moeda": "BRL",
+    "locale": "pt-BR"
+  },
+  "importacoes": []
+}

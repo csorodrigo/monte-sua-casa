@@ -1,0 +1,163 @@
+{
+  "versao": "2026-01-29",
+  "tipo": "mao-obra-casa",
+  "bdiPercentual": 14.4,
+  "secoes": {
+    "movimentoTerra": {
+      "nome": "MOVIMENTO DE TERRA",
+      "itens": {
+        "escavacaoValasBaldrame": { "descricao": "Escavação manual de valas para baldrame", "unidade": "m³", "preco": 37.5 },
+        "escavacaoFundacao60x60": { "descricao": "Escavação fundação 60x60", "unidade": "m³", "preco": 37.5 },
+        "reterroCompactacao": { "descricao": "Reterro com compactação", "unidade": "m³", "preco": 25.45 },
+        "espalhamentoBase": { "descricao": "Espalhamento de base", "unidade": "m³", "preco": 23.9 },
+        "apiloamentoFundoVala": { "descricao": "Apiloamento de fundo de vala", "unidade": "m²", "preco": 27.5 }
+      }
+    },
+    "baldrameAlvenaria": {
+      "nome": "BALDRAME E ALVENARIA",
+      "itens": {
+        "alvenariaPedraArgamassada": { "descricao": "Alvenaria de pedra argamassada", "unidade": "m³", "preco": 311.5 },
+        "impermeabilizacaoBaldrame": { "descricao": "Impermeabilização do baldrame", "unidade": "m²", "preco": 8.8 },
+        "alvenariaTijoloFurado": { "descricao": "Alvenaria de tijolo furado", "unidade": "m²", "preco": 41.5 }
+      }
+    },
+    "fundacoesEstruturas": {
+      "nome": "FUNDAÇÕES E ESTRUTURAS",
+      "itens": {
+        "concretoPilaresVigas": { "descricao": "Concreto para pilares e vigas", "unidade": "m³", "preco": 205.5 },
+        "formaDesforma": { "descricao": "Forma e desforma", "unidade": "m²", "preco": 11.2 },
+        "armaduraCA50": { "descricao": "Armadura CA-50", "unidade": "kg", "preco": 4.1 },
+        "lancamentoConcreto": { "descricao": "Lançamento de concreto", "unidade": "m³", "preco": 159.08 },
+        "lajePrefabricada": { "descricao": "Laje pré-fabricada", "unidade": "m²", "preco": 14.91 }
+      }
+    },
+    "esquadriasFerragens": {
+      "nome": "ESQUADRIAS E FERRAGENS",
+      "itens": {
+        "portaEntradaDecorativa": { "descricao": "Porta de entrada decorativa", "unidade": "un", "preco": 550.0 },
+        "portaMadeiraLei": { "descricao": "Porta de madeira de lei", "unidade": "un", "preco": 130.0 },
+        "cobogoAntiChuva": { "descricao": "Cobogó anti-chuva", "unidade": "un", "preco": 10.0 }
+      }
+    },
+    "cobertura": {
+      "nome": "COBERTURA",
+      "itens": {
+        "cobertaPadrao": { "descricao": "Cobertura padrão", "unidade": "m²", "preco": 60.0 }
+      }
+    },
+    "revestimentos": {
+      "nome": "REVESTIMENTOS",
+      "subSecoes": {
+        "parede": {
+          "nome": "Parede",
+          "itens": {
+            "chapiscoCimentoAreia": { "descricao": "Chapisco cimento/areia", "unidade": "m²", "preco": 5.58 },
+            "embocoCimentoAreia": { "descricao": "Emboço cimento/areia", "unidade": "m²", "preco": 15.9 },
+            "revestimentoCeramico": { "descricao": "Revestimento cerâmico", "unidade": "m²", "preco": 80.0 },
+            "rejuntamentoPorcelanato": { "descricao": "Rejuntamento porcelanato", "unidade": "m²", "preco": 8.8 }
+          }
+        },
+        "teto": {
+          "nome": "Teto",
+          "itens": {
+            "gessoConvencionalForro": { "descricao": "Gesso convencional forro", "unidade": "m²", "preco": 42.9 }
+          }
+        },
+        "pisos": {
+          "nome": "Pisos",
+          "itens": {
+            "concretoNaoEstruturalLastro": { "descricao": "Concreto não estrutural (lastro)", "unidade": "m³", "preco": 205.5 },
+            "regularizacaoBase": { "descricao": "Regularização de base", "unidade": "m²", "preco": 14.5 },
+            "revestimentoCeramico": { "descricao": "Revestimento cerâmico piso", "unidade": "m²", "preco": 80.0 },
+            "rejuntamentoPorcelanato": { "descricao": "Rejuntamento porcelanato piso", "unidade": "m²", "preco": 8.8 }
+          }
+        }
+      }
+    },
+    "instalacaoHidraulica": {
+      "nome": "INSTALAÇÃO HIDRÁULICA",
+      "itens": {
+        "tuboPVC50mm": { "descricao": "Tubo PVC 50mm", "unidade": "m", "preco": 22.59 },
+        "tuboPVC32mm": { "descricao": "Tubo PVC 32mm", "unidade": "m", "preco": 15.93 },
+        "tuboPVC25mm": { "descricao": "Tubo PVC 25mm", "unidade": "m", "preco": 14.56 },
+        "caixaDagua1500L": { "descricao": "Caixa d'água 1500L", "unidade": "un", "preco": 220.0 },
+        "flange2pol": { "descricao": "Flange 2 polegadas", "unidade": "un", "preco": 30.0 },
+        "flange1pol": { "descricao": "Flange 1 polegada", "unidade": "un", "preco": 30.0 },
+        "registroGaveta": { "descricao": "Registro de gaveta", "unidade": "un", "preco": 30.0 },
+        "registroGavetaCanopla": { "descricao": "Registro gaveta com canopla", "unidade": "un", "preco": 30.0 },
+        "registroPressaoChuveiro": { "descricao": "Registro de pressão chuveiro", "unidade": "un", "preco": 30.0 },
+        "boiaMecanica": { "descricao": "Boia mecânica", "unidade": "un", "preco": 30.0 },
+        "bancadaGranitoLavatorio": { "descricao": "Bancada granito lavatório", "unidade": "un", "preco": 110.0 },
+        "baciaSanitaria": { "descricao": "Bacia sanitária", "unidade": "un", "preco": 60.0 },
+        "chuveiroArticulado": { "descricao": "Chuveiro articulado", "unidade": "un", "preco": 10.0 },
+        "bancadaGranitoCozinha": { "descricao": "Bancada granito cozinha", "unidade": "un", "preco": 110.0 },
+        "tanqueInox": { "descricao": "Tanque inox", "unidade": "un", "preco": 110.0 },
+        "duchaHigienica": { "descricao": "Ducha higiênica", "unidade": "un", "preco": 20.0 }
+      }
+    },
+    "instalacaoSanitaria": {
+      "nome": "INSTALAÇÃO SANITÁRIA",
+      "itens": {
+        "caixaInspecao60x60": { "descricao": "Caixa de inspeção 60x60", "unidade": "un", "preco": 255.5 },
+        "tuboPVCEsgoto75mm": { "descricao": "Tubo PVC esgoto 75mm", "unidade": "m", "preco": 26.5 },
+        "tuboPVCEsgoto50mm": { "descricao": "Tubo PVC esgoto 50mm", "unidade": "m", "preco": 29.9 },
+        "raloSifonado": { "descricao": "Ralo sifonado", "unidade": "un", "preco": 40.0 }
+      }
+    },
+    "instalacaoEletrica": {
+      "nome": "INSTALAÇÃO ELÉTRICA",
+      "itens": {
+        "quadroDistribuicao12": { "descricao": "Quadro de distribuição 12 disjuntores", "unidade": "un", "preco": 90.0 },
+        "eletrodutoRigido32mm": { "descricao": "Eletroduto rígido 32mm", "unidade": "m", "preco": 14.89 },
+        "eletrodutoFlexivel": { "descricao": "Eletroduto flexível", "unidade": "m", "preco": 13.45 },
+        "caixaLigacaoPVC4x4": { "descricao": "Caixa de ligação PVC 4x4", "unidade": "un", "preco": 4.5 },
+        "caboIsoladoPVC1_5mm": { "descricao": "Cabo isolado PVC 1.5mm", "unidade": "m", "preco": 3.0 },
+        "caboIsoladoPVC2_5mm": { "descricao": "Cabo isolado PVC 2.5mm", "unidade": "m", "preco": 4.5 },
+        "caboIsoladoPVC4mm": { "descricao": "Cabo isolado PVC 4mm", "unidade": "m", "preco": 4.5 },
+        "caboIsoladoPVC10mm": { "descricao": "Cabo isolado PVC 10mm", "unidade": "m", "preco": 5.0 },
+        "disjuntor15A": { "descricao": "Disjuntor 15A", "unidade": "un", "preco": 20.0 },
+        "disjuntor20A": { "descricao": "Disjuntor 20A", "unidade": "un", "preco": 20.0 },
+        "disjuntor32A": { "descricao": "Disjuntor 32A", "unidade": "un", "preco": 20.0 },
+        "disjuntor50A": { "descricao": "Disjuntor 50A", "unidade": "un", "preco": 20.0 },
+        "hasteCobre": { "descricao": "Haste de cobre aterramento", "unidade": "un", "preco": 30.0 },
+        "interruptorTriplo": { "descricao": "Interruptor triplo", "unidade": "un", "preco": 12.0 },
+        "interruptorDuplo": { "descricao": "Interruptor duplo", "unidade": "un", "preco": 12.0 },
+        "interruptorCampainha": { "descricao": "Interruptor campainha", "unidade": "un", "preco": 12.0 },
+        "tomadaTripla": { "descricao": "Tomada tripla", "unidade": "un", "preco": 12.0 },
+        "pontoLogica": { "descricao": "Ponto de lógica", "unidade": "un", "preco": 80.0 },
+        "pontoTV": { "descricao": "Ponto de TV", "unidade": "un", "preco": 80.0 },
+        "luminariaLED": { "descricao": "Luminária LED", "unidade": "un", "preco": 30.0 }
+      }
+    },
+    "gasGlp": {
+      "nome": "GÁS GLP",
+      "itens": {
+        "tuboCobre15mm": { "descricao": "Tubo de cobre 15mm", "unidade": "m", "preco": 35.0 },
+        "testeEstanqueidade": { "descricao": "Teste de estanqueidade", "unidade": "un", "preco": 1200.0 }
+      }
+    },
+    "pintura": {
+      "nome": "PINTURA",
+      "itens": {
+        "texturaExterna": { "descricao": "Textura externa", "unidade": "m²", "preco": 15.5 },
+        "emassamento": { "descricao": "Emassamento", "unidade": "m²", "preco": 10.0 },
+        "pinturaLatexPVA": { "descricao": "Pintura látex PVA", "unidade": "m²", "preco": 10.0 },
+        "seladorMadeira": { "descricao": "Selador para madeira", "unidade": "m²", "preco": 10.0 },
+        "esmalteSintetico": { "descricao": "Esmalte sintético", "unidade": "m²", "preco": 10.0 }
+      }
+    },
+    "churrasqueira": {
+      "nome": "CHURRASQUEIRA",
+      "itens": {
+        "churrasqueiraMediaPorte": { "descricao": "Churrasqueira médio porte", "unidade": "un", "preco": 2100.0 }
+      }
+    },
+    "limpezaObra": {
+      "nome": "LIMPEZA DA OBRA",
+      "itens": {
+        "transporteHorizontal": { "descricao": "Transporte horizontal", "unidade": "m³", "preco": 56.6 },
+        "limpezaGeral": { "descricao": "Limpeza geral da obra", "unidade": "m²", "preco": 1500.0 }
+      }
+    }
+  }
+}

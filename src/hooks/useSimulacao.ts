@@ -61,6 +61,9 @@ interface UseSimulacaoReturn {
   setPiscinaComprimento: (valor: number) => void;
   setPiscinaProfundidade: (valor: number) => void;
 
+  // Acoes - Churrasqueira
+  setIncluirChurrasqueira: (valor: boolean) => void;
+
   // Acoes - Calculo
   calcular: () => Promise<void>;
   calcularRelatorioDetalhado: () => Promise<void>;
@@ -89,6 +92,7 @@ const dadosIniciaisVazios: DadosSimulacao = {
     comprimento: 8,
     profundidade: 1.5,
   },
+  incluirChurrasqueira: false,
 };
 
 export function useSimulacao(): UseSimulacaoReturn {
@@ -302,6 +306,15 @@ export function useSimulacao(): UseSimulacaoReturn {
     setResultado(null);
   }, []);
 
+  // Acoes - Churrasqueira
+  const setIncluirChurrasqueira = useCallback((valor: boolean) => {
+    setDados(prev => ({
+      ...prev,
+      incluirChurrasqueira: valor,
+    }));
+    setResultado(null);
+  }, []);
+
   // Calcular orcamento
   const calcular = useCallback(async () => {
     setCarregando(true);
@@ -429,6 +442,7 @@ export function useSimulacao(): UseSimulacaoReturn {
     setPiscinaLargura,
     setPiscinaComprimento,
     setPiscinaProfundidade,
+    setIncluirChurrasqueira,
     calcular,
     calcularRelatorioDetalhado,
     salvar,
