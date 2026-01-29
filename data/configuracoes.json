@@ -222,6 +222,7 @@
     "esquadrias": {
       "portaEntrada": 550,
       "portaMadeiraLei": 130,
+      "esquadriaAluminio": 35,
       "cobogoAntiChuva": 10
     },
     "revestimentos": {
@@ -244,13 +245,16 @@
       "flange": 30,
       "registro": 30,
       "boiaMecanica": 30,
+      "torneiraJardim": 30,
       "bancadaGranito": 110,
       "baciaSanitaria": 60,
       "chuveiro": 10,
-      "tanqueInox": 110
+      "tanqueInox": 110,
+      "duchaHigienica": 20
     },
     "sanitaria": {
       "caixaInspecao": 255.50,
+      "tuboPVC100mm": 31.20,
       "tuboPVC75mm": 26.50,
       "tuboPVC50mm": 29.90,
       "raloSifonado": 40
@@ -260,6 +264,7 @@
       "eletrodutoRigido": 14.89,
       "eletrodutoFlexivel": 13.45,
       "caixaPVC": 4.50,
+      "caixaPVC4x2": 4.50,
       "caboPVC1_5mm": 3,
       "caboPVC2_5mm": 4.50,
       "caboPVC4mm": 4.50,

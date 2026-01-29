@@ -2,6 +2,7 @@
 // Os preços base são multiplicados pelo fator do estado (CUB)
 //
 // IMPORTANTE: Os preços base vêm do configuracoes.json (precosBaseMaoObra)
+// CORREÇÕES APLICADAS conforme planilha de referência
 
 import { getPrecosBaseMaoObra, BDI } from '@/lib/configuracoes';
 import { PrecosMaoObra } from './types';
@@ -28,6 +29,8 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
   },
   baldrameAlvenaria: {
     alvenariaPedraArgamassada: precosBase.baldrame.alvenariaPedra,
+    // NOVO: Cinta em concreto armado
+    cintaConcretoArmado: precosBase.baldrame.cintaConcreto,
     impermeabilizacaoBaldrame: precosBase.baldrame.impermeabilizacao,
     alvenariaTijoloFurado: precosBase.baldrame.alvenariaTijolo,
   },
@@ -41,6 +44,8 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
   esquadriasFerragens: {
     portaEntradaDecorativa: precosBase.esquadrias.portaEntrada,
     portaMadeiraLei: precosBase.esquadrias.portaMadeiraLei,
+    // NOVO: Esquadria de alumínio
+    esquadriaAluminio: precosBase.esquadrias.esquadriaAluminio || 35.0,
     cobogoAntiChuva: precosBase.esquadrias.cobogoAntiChuva,
   },
   cobertura: {
@@ -50,6 +55,8 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
   revestimentos: {
     parede: {
       chapiscoCimentoAreia: precosBase.revestimentos.chapisco,
+      // NOVO: Reboco
+      rebocoCimentoAreia: precosBase.revestimentos.reboco,
       embocoCimentoAreia: precosBase.revestimentos.emboco,
       revestimentoCeramico: precosBase.revestimentos.ceramicaParede,
       rejuntamentoPorcelanato: precosBase.revestimentos.rejuntamento,
@@ -62,6 +69,8 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
       regularizacaoBase: precosBase.revestimentos.regularizacaoBase,
       revestimentoCeramico: precosBase.revestimentos.ceramicaPiso,
       rejuntamentoPorcelanato: precosBase.revestimentos.rejuntamento,
+      // NOVO: Soleiras de granito
+      soleirasGranito: precosBase.revestimentos.soleirasGranito,
     },
   },
   instalacaoHidraulica: {
@@ -69,21 +78,28 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
     tuboPVC32mm: precosBase.hidraulica.tuboPVC32mm,
     tuboPVC25mm: precosBase.hidraulica.tuboPVC25mm,
     caixaDagua1500L: precosBase.hidraulica.caixaDagua,
+    // SEPARADOS: Flanges por tamanho
     flange2pol: precosBase.hidraulica.flange,
     flange1pol: precosBase.hidraulica.flange,
-    registroGaveta: precosBase.hidraulica.registro,
+    // SEPARADOS: Registros por tipo
+    registroGaveta2pol: precosBase.hidraulica.registro,
     registroGavetaCanopla: precosBase.hidraulica.registro,
     registroPressaoChuveiro: precosBase.hidraulica.registro,
     boiaMecanica: precosBase.hidraulica.boiaMecanica,
+    // NOVO: Torneira jardim
+    torneiraJardim: precosBase.hidraulica.torneiraJardim || 30.0,
     bancadaGranitoLavatorio: precosBase.hidraulica.bancadaGranito,
     baciaSanitaria: precosBase.hidraulica.baciaSanitaria,
     chuveiroArticulado: precosBase.hidraulica.chuveiro,
     bancadaGranitoCozinha: precosBase.hidraulica.bancadaGranito,
     tanqueInox: precosBase.hidraulica.tanqueInox,
-    duchaHigienica: 20.0,
+    // NOVO: Ducha higiênica
+    duchaHigienica: precosBase.hidraulica.duchaHigienica || 20.0,
   },
   instalacaoSanitaria: {
     caixaInspecao60x60: precosBase.sanitaria.caixaInspecao,
+    // NOVO: Tubo 100mm
+    tuboPVCEsgoto100mm: precosBase.sanitaria.tuboPVC100mm || 31.20,
     tuboPVCEsgoto75mm: precosBase.sanitaria.tuboPVC75mm,
     tuboPVCEsgoto50mm: precosBase.sanitaria.tuboPVC50mm,
     raloSifonado: precosBase.sanitaria.raloSifonado,
@@ -93,15 +109,19 @@ export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
     eletrodutoRigido32mm: precosBase.eletrica.eletrodutoRigido,
     eletrodutoFlexivel: precosBase.eletrica.eletrodutoFlexivel,
     caixaLigacaoPVC4x4: precosBase.eletrica.caixaPVC,
+    // NOVO: Caixa 4x2
+    caixaLigacaoPVC4x2: precosBase.eletrica.caixaPVC4x2 || 4.50,
     caboIsoladoPVC1_5mm: precosBase.eletrica.caboPVC1_5mm,
     caboIsoladoPVC2_5mm: precosBase.eletrica.caboPVC2_5mm,
     caboIsoladoPVC4mm: precosBase.eletrica.caboPVC4mm,
     caboIsoladoPVC10mm: precosBase.eletrica.caboPVC10mm,
+    // SEPARADOS: Disjuntores por amperagem
     disjuntor15A: precosBase.eletrica.disjuntor,
     disjuntor20A: precosBase.eletrica.disjuntor,
     disjuntor32A: precosBase.eletrica.disjuntor,
     disjuntor50A: precosBase.eletrica.disjuntor,
     hasteCobre: precosBase.eletrica.hasteCobre,
+    // SEPARADOS: Interruptores por tipo
     interruptorTriplo: precosBase.eletrica.interruptor,
     interruptorDuplo: precosBase.eletrica.interruptor,
     interruptorCampainha: precosBase.eletrica.interruptor,
