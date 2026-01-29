@@ -1,12 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { estados } from '@/lib/static-data';
 
 export async function GET() {
   try {
-    const estados = await prisma.estado.findMany({
-      orderBy: { nome: 'asc' },
-    });
-
     return NextResponse.json({
       success: true,
       data: estados,

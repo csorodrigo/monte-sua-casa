@@ -1,14 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { tiposTelhado, tiposTijolo, padroesAcabamento } from '@/lib/static-data';
 
 export async function GET() {
   try {
-    const [tiposTelhado, tiposTijolo, padroesAcabamento] = await Promise.all([
-      prisma.tipoTelhado.findMany({ orderBy: { nome: 'asc' } }),
-      prisma.tipoTijolo.findMany({ orderBy: { nome: 'asc' } }),
-      prisma.padraoAcabamento.findMany({ orderBy: { multiplicadorPreco: 'asc' } }),
-    ]);
-
     return NextResponse.json({
       success: true,
       data: {

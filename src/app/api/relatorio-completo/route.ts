@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { DadosSimulacao } from '@/types';
 import { RelatorioCompleto } from '@/types/relatorios';
 import { calcularOrcamentoCasaDetalhado } from '@/lib/calculations/orcamento-detalhado-casa';
@@ -14,19 +13,22 @@ import {
 } from '@/lib/calculations/orcamento-detalhado-piscina';
 import { calcularMemorialEstrutural } from '@/lib/calculations/memorial-calculo-estrutural';
 import { areaTotalConstruida, areaTotalParedes, areaTelhado, dimensoesExternas } from '@/lib/calculations';
-import { ALVENARIA } from '@/lib/calculations/constants';
+import {
+  getEstadoById,
+  getTipoTelhadoById,
+  getTipoTijoloById,
+  getPadraoAcabamentoById,
+} from '@/lib/static-data';
 
 export async function POST(request: NextRequest) {
   try {
     const dados: DadosSimulacao = await request.json();
 
-    // Buscar dados do banco
-    const [estado, tipoTelhado, tipoTijolo, padraoAcabamento] = await Promise.all([
-      prisma.estado.findUnique({ where: { id: dados.estadoId } }),
-      prisma.tipoTelhado.findUnique({ where: { id: dados.tipoTelhadoId } }),
-      prisma.tipoTijolo.findUnique({ where: { id: dados.tipoTijoloId } }),
-      prisma.padraoAcabamento.findUnique({ where: { id: dados.padraoAcabamentoId } }),
-    ]);
+    // Buscar dados estaticos
+    const estado = getEstadoById(dados.estadoId);
+    const tipoTelhado = getTipoTelhadoById(dados.tipoTelhadoId);
+    const tipoTijolo = getTipoTijoloById(dados.tipoTijoloId);
+    const padraoAcabamento = getPadraoAcabamentoById(dados.padraoAcabamentoId);
 
     if (!estado || !tipoTelhado || !tipoTijolo || !padraoAcabamento) {
       return NextResponse.json(
