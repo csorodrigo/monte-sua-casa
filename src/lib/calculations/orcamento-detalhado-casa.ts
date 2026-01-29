@@ -239,7 +239,7 @@ export function calcularOrcamentoCasaDetalhado(params: ParametrosCalculo): Orcam
   const metrosTubo25 = areaTotal * 0.3;
   const metrosTubo32 = areaTotal * 0.2;
   const metrosTubo50 = areaTotal * 0.15;
-  const _qtdPontosHidraulicos = (qtdBanheiros * 4) + 4; // banheiros (vaso, pia, chuveiro, ducha) + cozinha + tanque - para referência
+  // qtdPontosHidraulicos = (qtdBanheiros * 4) + 4 - banheiros (vaso, pia, chuveiro, ducha) + cozinha + tanque
 
   const instalacaoHidraulica = criarSecao('3.7', 'INSTALAÇÃO HIDRÁULICA', [
     criarItem('3.7.1', 'Tubo PVC soldável 50mm (água fria)', 'm', metrosTubo50, P.instalacaoHidraulica.tuboPVC50mm),
@@ -331,7 +331,7 @@ export function calcularOrcamentoCasaDetalhado(params: ParametrosCalculo): Orcam
   // =============================================
   const areaPinturaInterna = areaParedes * 0.6 + areaTotal; // paredes internas + teto
   const areaPinturaExterna = areaParedes * 0.4;
-  const _areaPinturaTotal = areaPinturaInterna + areaPinturaExterna; // para referência
+  // areaPinturaTotal = areaPinturaInterna + areaPinturaExterna - para referência
 
   const pintura = criarSecao('3.11', 'PINTURA', [
     criarItem('3.11.2', 'Textura duas demãos externa do tipo grafiada', 'm²', areaPinturaExterna, P.pintura.texturaExterna * mult),
