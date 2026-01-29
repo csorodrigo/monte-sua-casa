@@ -1,32 +1,42 @@
 // Orçamento detalhado do Muro - Baseado na planilha original
+// Fórmulas do Excel: Preços × (1 + INCC) para materiais
+// Mão de obra: PreçoBase × (CUB_Estado / CUB_Base)
 
 import { ConfiguracaoMuro, Estado } from '@/types';
 import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado } from './orcamento-detalhado-casa';
+import { getFatorINCC, getCUBBase, BDI } from '@/lib/configuracoes';
+
+// Preços base do muro (aplicar INCC nos materiais)
+const INCC = getFatorINCC();
+
+function comINCC(preco: number): number {
+  return preco * (1 + INCC);
+}
 
 export const PRECOS_MURO = {
   // 1.0 SERVIÇOS PRELIMINARES
-  raspacemLimpezaTerreno: 17.80,      // m²
+  raspacemLimpezaTerreno: comINCC(17.80),      // m²
 
   // 2.1 MOVIMENTO DE TERRA
-  escavacaoValasBaldrame: 37.51,      // m³
-  reterroCompactacao: 25.46,          // m³
-  espalhamentoBase: 23.91,            // m³
-  apiloamentoFundoVala: 27.51,        // m²
+  escavacaoValasBaldrame: comINCC(37.50),      // m³
+  reterroCompactacao: comINCC(25.45),          // m³
+  espalhamentoBase: comINCC(23.90),            // m³
+  apiloamentoFundoVala: comINCC(27.50),        // m²
 
   // 2.2 BALDRAME E ALVENARIA DE ELEVAÇÃO
-  baldrameTijoloFuradoDobrado: 543.92, // m³
-  alvenariaTijoloFurado: 58.58,       // m² (h=2.00m, traço 1:2:8)
-  cintaSuperiorConcretoArmado: 1250.51, // m³
-  pilares10x15cm: 1250.51,            // m³ (a cada 2,5m)
-  chapiscoTraco1_4: 7.34,             // m²
-  rebocoTraco1_5: 35.80,              // m²
+  baldrameTijoloFuradoDobrado: comINCC(543.91), // m³
+  alvenariaTijoloFurado: comINCC(58.58),       // m² (h=2.00m, traço 1:2:8)
+  cintaSuperiorConcretoArmado: comINCC(1250.50), // m³
+  pilares10x15cm: comINCC(1250.50),            // m³ (a cada 2,5m)
+  chapiscoTraco1_4: comINCC(7.34),             // m²
+  rebocoTraco1_5: comINCC(35.80),              // m²
 
   // 2.3 PINTURA DO MURO
-  texturaDuasDemaos: 25.40,           // m²
+  texturaDuasDemaos: comINCC(25.40),           // m²
 
   // 2.4 PORTÕES
-  portaoMetalon: 560.00,              // m²
-  motorCremalheira6m: 800.00,         // unid
+  portaoMetalon: comINCC(560.00),              // m²
+  motorCremalheira6m: comINCC(800.00),         // unid
 };
 
 export interface OrcamentoMuroDetalhado {
@@ -209,7 +219,11 @@ export function calcularMaoObraMuroDetalhada(params: ParametrosMuro, estado: Est
     };
   }
 
-  const fatorEstado = estado.custoMaoObraPorM2 / 98;
+  // Fator de ajuste pelo estado baseado no CUB
+  // Fórmula do Excel: CUB_Estado / CUB_Base (SP)
+  const cubBase = getCUBBase();
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
+  const fatorEstado = cubEstado / cubBase;
   const comprimentoTotal = muro.frente + muro.fundo + muro.direita + muro.esquerda;
   const areaMuro = comprimentoTotal * muro.altura;
   const qtdPilares = Math.ceil(comprimentoTotal / 2.5);
@@ -260,7 +274,8 @@ export function calcularMaoObraMuroDetalhada(params: ParametrosMuro, estado: Est
     baldrameAlvenaria.subtotal +
     pinturaMuro.subtotal;
 
-  const bdiPercentual = 15;
+  // BDI para muro: 15% conforme planilha
+  const bdiPercentual = BDI.MURO;
   const bdi = subtotal * (bdiPercentual / 100);
   const totalGeral = subtotal + bdi;
 

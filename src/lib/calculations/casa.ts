@@ -1,4 +1,5 @@
 // Calculo completo do orcamento da casa
+// Fórmula de mão de obra: CUB_Estado × multiplicadorAcabamento
 
 import {
   Comodo,
@@ -12,6 +13,7 @@ import {
   BreakdownOrcamento,
 } from '@/types';
 import { PRECOS, DESPERDICIO, TELHADO, ALVENARIA } from './constants';
+import { getCUBBase } from '@/lib/configuracoes';
 import {
   areaTotalConstruida,
   areaTotalParedes,
@@ -201,16 +203,24 @@ function calcularAcabamento(
 
 /**
  * Calcula orcamento de mao de obra
+ * Usa CUB do estado como base
  */
 function calcularMaoObra(
   areaTotal: number,
   estado: Estado,
   padraoAcabamento: PadraoAcabamento
 ): SecaoOrcamento {
-  const custoBase = estado.custoMaoObraPorM2 * padraoAcabamento.multiplicadorPreco;
+  // Usa CUB do estado se disponível, senão usa custoMaoObraPorM2 para compatibilidade
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
+  const cubBase = getCUBBase();
+  const fatorEstado = cubEstado / cubBase;
+
+  // Custo base por m² ajustado pelo estado e padrão de acabamento
+  const custoBasePorM2 = 200; // Valor base de mão de obra por m²
+  const custoAjustado = custoBasePorM2 * fatorEstado * padraoAcabamento.multiplicadorPreco;
 
   const itens: ItemOrcamento[] = [
-    criarItem(`Mao de obra (${estado.sigla})`, areaTotal, 'm2', custoBase),
+    criarItem(`Mao de obra (${estado.sigla})`, areaTotal, 'm2', custoAjustado),
   ];
 
   return criarSecao('Mao de Obra', itens);

@@ -1,9 +1,11 @@
 // Mão de Obra detalhada da Casa - Baseado na planilha Excel "monte-sua-casa-simulacao.xlsx"
 // Aba: MÃO DE OBRA - CASA (laranja)
+// Fórmula de ajuste: PreçoBase × (CUB_Estado / CUB_Base)
 
 import { Estado, PadraoAcabamento } from '@/types';
 import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado, SubSecaoRevestimentos } from './orcamento-detalhado-casa';
 import { PRECOS_MAO_OBRA_CASA, BDI_PERCENTUAL } from '@/lib/prices/mao-obra-casa';
+import { getCUBBase } from '@/lib/configuracoes';
 
 interface ParametrosMaoObraCasa {
   areaTotal: number;
@@ -82,8 +84,11 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
     incluirChurrasqueira,
   } = params;
 
-  // Fator de ajuste pelo estado (base SP = 98)
-  const fatorEstado = estado.custoMaoObraPorM2 / 98;
+  // Fator de ajuste pelo estado baseado no CUB
+  // Fórmula do Excel: CUB_Estado / CUB_Base (SP)
+  const cubBase = getCUBBase();
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48; // Fallback para compatibilidade
+  const fatorEstado = cubEstado / cubBase;
   const mult = padraoAcabamento.multiplicadorPreco;
   const P = PRECOS_MAO_OBRA_CASA;
 

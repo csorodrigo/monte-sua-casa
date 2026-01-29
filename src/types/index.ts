@@ -99,7 +99,8 @@ export interface Estado {
   id: number;
   sigla: string;
   nome: string;
-  custoMaoObraPorM2: number;
+  cub: number;  // CUB do estado para cálculos
+  custoMaoObraPorM2: number;  // Mantido para compatibilidade
 }
 
 export interface TipoTelhado {

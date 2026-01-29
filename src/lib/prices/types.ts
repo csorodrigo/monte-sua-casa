@@ -1,31 +1,53 @@
-// Tipos e interfaces para precos - Gerado automaticamente
-// Data de geracao: 2026-01-29 08:40:26
-// Fonte: monte-sua-casa-simulacao.xlsx
+// Tipos e interfaces para preços
+// Fórmulas do Excel implementadas corretamente
 
 /**
- * Fator de ajuste para materiais (0.79%)
- * Aplicado sobre o preco base para obter o preco ajustado
+ * Fator de ajuste INCC (0.79%)
+ * Este valor vem do configuracoes.json
  */
 export const FATOR_AJUSTE_MATERIAIS = 0.0079;
 
 /**
- * Aplica o fator de ajuste ao preco base
- * @param precoBase - Preco base do item
- * @returns Preco ajustado com fator de 0.79%
+ * Aplica o fator INCC ao preço base
+ * Fórmula do Excel: PreçoBase × (1 + FatorINCC)
+ * @param precoBase - Preço base do item
+ * @returns Preço ajustado com fator INCC
  */
 export function aplicarAjuste(precoBase: number): number {
   return precoBase * (1 + FATOR_AJUSTE_MATERIAIS);
 }
 
 /**
- * Interface para precos de uma secao
+ * Aplica ajuste de estado baseado no CUB
+ * Fórmula do Excel: PreçoBase × (CUB_Estado / CUB_Base)
+ * @param precoBase - Preço base do item
+ * @param fatorEstado - Fator do estado (CUB_Estado / CUB_Base)
+ * @returns Preço ajustado pelo estado
+ */
+export function aplicarAjusteEstado(precoBase: number, fatorEstado: number): number {
+  return precoBase * fatorEstado;
+}
+
+/**
+ * Aplica ajuste completo (INCC + Estado)
+ * Fórmula: PreçoBase × (1 + FatorINCC) × FatorEstado
+ * @param precoBase - Preço base
+ * @param fatorEstado - Fator do estado
+ * @returns Preço com ambos os ajustes
+ */
+export function aplicarAjusteCompleto(precoBase: number, fatorEstado: number): number {
+  return precoBase * (1 + FATOR_AJUSTE_MATERIAIS) * fatorEstado;
+}
+
+/**
+ * Interface para preços de uma seção
  */
 export interface PrecosSecao {
   [key: string]: number;
 }
 
 /**
- * Interface para sub-secoes de revestimentos
+ * Interface para sub-seções de revestimentos
  */
 export interface PrecosRevestimentos {
   parede: PrecosSecao;
@@ -34,7 +56,7 @@ export interface PrecosRevestimentos {
 }
 
 /**
- * Interface completa de precos de materiais
+ * Interface completa de preços de materiais
  */
 export interface PrecosMateriais {
   movimentoTerra: PrecosSecao;
@@ -53,7 +75,7 @@ export interface PrecosMateriais {
 }
 
 /**
- * Interface completa de precos de mao de obra
+ * Interface completa de preços de mão de obra
  */
 export interface PrecosMaoObra {
   movimentoTerra: PrecosSecao;

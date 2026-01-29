@@ -1,33 +1,43 @@
 // Orçamento detalhado da Piscina - Baseado na planilha original
+// Fórmulas do Excel: Preços × (1 + INCC) para materiais
+// Mão de obra: PreçoBase × (CUB_Estado / CUB_Base)
 
 import { ConfiguracaoPiscina, Estado } from '@/types';
 import { ItemOrcamentoDetalhado, SecaoOrcamentoDetalhado } from './orcamento-detalhado-casa';
+import { getFatorINCC, getCUBBase, BDI } from '@/lib/configuracoes';
+
+// Aplica INCC aos preços de materiais
+const INCC = getFatorINCC();
+
+function comINCC(preco: number): number {
+  return preco * (1 + INCC);
+}
 
 export const PRECOS_PISCINA = {
-  // Materiais
-  escavacaoManual: 37.51,             // m³
-  reaterroCompactacao: 25.46,         // m³
-  transporteHorizontal: 56.61,        // m³
-  lastroConcreto10cm: 299.01,         // m³ (com tela metálica)
-  fundacaoPilares: 595.51,            // m³
-  concretoPilaresFck20: 595.51,       // m³
-  concretoVigasFck20: 595.51,         // m³
-  formaDesfomaMadeira: 159.09,        // m²
-  armaduraCA50: 16.91,                // kg
-  lancamentoConcreto: 159.09,         // m³
-  alvenariaTijoloFurado: 62.99,       // m²
-  regularizacaoSuperficies: 21.91,    // m²
-  imprimacaoFrioAsfalto: 20.55,       // m²
-  mantaAsfaltica3mm: 115.67,          // m²
-  protecaoMecanicaManta: 28.51,       // m²
-  argamassaImpermeabilizante: 35.51,  // m²
-  ceramicaAzulPiscina: 125.01,        // m²
-  rejunteEpoxi: 45.01,                // m²
-  bordaPiscina: 85.01,                // m
-  sistemaFiltragem: 2500.00,          // cj
-  bombaRecirculacao: 1800.00,         // unid
-  iluminacaoSubaquatica: 450.00,      // unid
-  cascata: 1200.00,                   // unid
+  // Materiais - com INCC aplicado
+  escavacaoManual: comINCC(37.50),             // m³
+  reaterroCompactacao: comINCC(25.45),         // m³
+  transporteHorizontal: comINCC(56.60),        // m³
+  lastroConcreto10cm: comINCC(299.00),         // m³ (com tela metálica)
+  fundacaoPilares: comINCC(595.50),            // m³
+  concretoPilaresFck20: comINCC(595.50),       // m³
+  concretoVigasFck20: comINCC(595.50),         // m³
+  formaDesfomaMadeira: comINCC(159.08),        // m²
+  armaduraCA50: comINCC(16.90),                // kg
+  lancamentoConcreto: comINCC(159.08),         // m³
+  alvenariaTijoloFurado: comINCC(62.98),       // m²
+  regularizacaoSuperficies: comINCC(21.90),    // m²
+  imprimacaoFrioAsfalto: comINCC(20.55),       // m²
+  mantaAsfaltica3mm: comINCC(115.67),          // m²
+  protecaoMecanicaManta: comINCC(28.50),       // m²
+  argamassaImpermeabilizante: comINCC(35.50),  // m²
+  ceramicaAzulPiscina: comINCC(125.00),        // m²
+  rejunteEpoxi: comINCC(45.00),                // m²
+  bordaPiscina: comINCC(85.00),                // m
+  sistemaFiltragem: comINCC(2500.00),          // cj
+  bombaRecirculacao: comINCC(1800.00),         // unid
+  iluminacaoSubaquatica: comINCC(450.00),      // unid
+  cascata: comINCC(1200.00),                   // unid
 };
 
 export const PRECOS_MAO_OBRA_PISCINA = {
@@ -207,7 +217,11 @@ export function calcularMaoObraPiscinaDetalhada(piscina: ConfiguracaoPiscina, es
     };
   }
 
-  const fatorEstado = estado.custoMaoObraPorM2 / 98;
+  // Fator de ajuste pelo estado baseado no CUB
+  // Fórmula do Excel: CUB_Estado / CUB_Base (SP)
+  const cubBase = getCUBBase();
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
+  const fatorEstado = cubEstado / cubBase;
 
   const volume = piscina.largura * piscina.comprimento * piscina.profundidade;
   const areaFundo = piscina.largura * piscina.comprimento;
@@ -268,7 +282,8 @@ export function calcularMaoObraPiscinaDetalhada(piscina: ConfiguracaoPiscina, es
     revestimento.subtotal +
     equipamentos.subtotal;
 
-  const bdiPercentual = 15;
+  // BDI para piscina: 15% conforme planilha
+  const bdiPercentual = BDI.PISCINA;
   const bdi = subtotal * (bdiPercentual / 100);
   const totalGeral = subtotal + bdi;
 

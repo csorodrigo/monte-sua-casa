@@ -1,7 +1,9 @@
 // Calculo do orcamento de muro
+// Fórmula de mão de obra: CUB_Estado / CUB_Base
 
 import { ConfiguracaoMuro, Estado, ResultadoMuro, SecaoOrcamento, ItemOrcamento } from '@/types';
 import { PRECOS, DESPERDICIO } from './constants';
+import { getCUBBase } from '@/lib/configuracoes';
 
 interface ParametrosMuro {
   muro: ConfiguracaoMuro;
@@ -105,7 +107,11 @@ export function calcularOrcamentoMuro(params: ParametrosMuro): {
   const totalMateriais = itensMaterial.reduce((sum, item) => sum + item.total, 0);
 
   // Mao de obra
-  const custoMaoObraPorM2 = PRECOS.muroMaoObraPorM2 * (estado.custoMaoObraPorM2 / 85); // Normaliza pelo estado
+  // Usa fator de estado baseado no CUB
+  const cubBase = getCUBBase();
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
+  const fatorEstado = cubEstado / cubBase;
+  const custoMaoObraPorM2 = PRECOS.muroMaoObraPorM2 * fatorEstado;
   const totalMaoObra = areaTotal * custoMaoObraPorM2;
 
   const itemMaoObra = criarItem(`Mao de obra muro (${estado.sigla})`, areaTotal, 'm2', custoMaoObraPorM2);

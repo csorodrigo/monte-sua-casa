@@ -1,7 +1,9 @@
 // Calculo do orcamento de piscina
+// Fórmula de mão de obra: CUB_Estado / CUB_Base
 
 import { ConfiguracaoPiscina, Estado, ResultadoPiscina, SecaoOrcamento, ItemOrcamento } from '@/types';
 import { PRECOS, DESPERDICIO } from './constants';
+import { getCUBBase } from '@/lib/configuracoes';
 
 interface ParametrosPiscina {
   piscina: ConfiguracaoPiscina;
@@ -117,7 +119,11 @@ export function calcularOrcamentoPiscina(params: ParametrosPiscina): {
   const totalMateriais = itensMaterial.reduce((sum, item) => sum + item.total, 0);
 
   // Mao de obra (mais especializada, portanto mais cara)
-  const custoMaoObraPorM3 = PRECOS.piscinaMaoObraPorM3 * (estado.custoMaoObraPorM2 / 85);
+  // Usa fator de estado baseado no CUB
+  const cubBase = getCUBBase();
+  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
+  const fatorEstado = cubEstado / cubBase;
+  const custoMaoObraPorM3 = PRECOS.piscinaMaoObraPorM3 * fatorEstado;
   const totalMaoObra = volume * custoMaoObraPorM3;
 
   const itemMaoObra = criarItem(`Mao de obra piscina (${estado.sigla})`, volume, 'm3', custoMaoObraPorM3);

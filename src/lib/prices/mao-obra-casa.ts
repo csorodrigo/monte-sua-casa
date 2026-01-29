@@ -1,129 +1,132 @@
-// Precos de mao de obra da Casa - Extraido automaticamente do Excel
-// Data de geracao: 2026-01-29 08:40:26
-// Fonte: monte-sua-casa-simulacao.xlsx - Aba "MAO DE OBRA - CASA"
+// Preços de mão de obra da Casa - Carregados do configuracoes.json
+// Os preços base são multiplicados pelo fator do estado (CUB)
 //
-// IMPORTANTE: Este arquivo e gerado automaticamente pelo script extract-excel.py
-// Nao edite manualmente. Para atualizar, modifique o Excel e execute o script.
+// IMPORTANTE: Os preços base vêm do configuracoes.json (precosBaseMaoObra)
 
+import { getPrecosBaseMaoObra, BDI } from '@/lib/configuracoes';
 import { PrecosMaoObra } from './types';
 
-/**
- * BDI (Beneficios e Despesas Indiretas) percentual
- * Conforme planilha: 14.40%
- */
-export const BDI_PERCENTUAL = 14.4;
+const precosBase = getPrecosBaseMaoObra();
 
 /**
- * Precos de mao de obra da casa
+ * BDI (Benefícios e Despesas Indiretas) percentual para Casa
+ * Conforme planilha: 14.40%
+ */
+export const BDI_PERCENTUAL = BDI.CASA;
+
+/**
+ * Preços base de mão de obra da casa
+ * Estes preços serão multiplicados pelo fator do estado nos cálculos
  */
 export const PRECOS_MAO_OBRA_CASA: PrecosMaoObra = {
   movimentoTerra: {
-    escavacaoValasBaldrame: 37.5,
-    escavacaoFundacao60x60: 37.5,
-    reterroCompactacao: 25.45,
-    espalhamentoBase: 23.9,
-    apiloamentoFundoVala: 27.5,
+    escavacaoValasBaldrame: precosBase.movimentoTerra.escavacaoValas,
+    escavacaoFundacao60x60: precosBase.movimentoTerra.escavacaoFundacao,
+    reterroCompactacao: precosBase.movimentoTerra.reterroCompactacao,
+    espalhamentoBase: precosBase.movimentoTerra.espalhamentoBase,
+    apiloamentoFundoVala: precosBase.movimentoTerra.apiloamentoFundo,
   },
   baldrameAlvenaria: {
-    alvenariaPedraArgamassada: 311.5,
-    impermeabilizacaoBaldrame: 8.8,
-    alvenariaTijoloFurado: 41.5,
+    alvenariaPedraArgamassada: precosBase.baldrame.alvenariaPedra,
+    impermeabilizacaoBaldrame: precosBase.baldrame.impermeabilizacao,
+    alvenariaTijoloFurado: precosBase.baldrame.alvenariaTijolo,
   },
   fundacoesEstruturas: {
-    concretoPilaresVigas: 205.5,
-    formaDesforma: 11.2,
-    armaduraCA50: 4.1,
-    lancamentoConcreto: 159.08,
-    lajePrefabricada: 14.91,
+    concretoPilaresVigas: precosBase.estrutura.concretoPilaresVigas,
+    formaDesforma: precosBase.estrutura.formaDesforma,
+    armaduraCA50: precosBase.estrutura.armaduraCA50,
+    lancamentoConcreto: precosBase.estrutura.lancamentoConcreto,
+    lajePrefabricada: precosBase.estrutura.lajePrefabricada,
   },
   esquadriasFerragens: {
-    portaEntradaDecorativa: 550.0,
-    portaMadeiraLei: 130.0,
-    cobogoAntiChuva: 10.0,
+    portaEntradaDecorativa: precosBase.esquadrias.portaEntrada,
+    portaMadeiraLei: precosBase.esquadrias.portaMadeiraLei,
+    cobogoAntiChuva: precosBase.esquadrias.cobogoAntiChuva,
   },
   cobertura: {
+    // Usa preço do tipo de telhado selecionado
     cobertaPadrao: 60.0,
   },
   revestimentos: {
     parede: {
-      chapiscoCimentoAreia: 5.58,
-      embocoCimentoAreia: 15.9,
-      revestimentoCeramico: 80.0,
-      rejuntamentoPorcelanato: 8.8,
+      chapiscoCimentoAreia: precosBase.revestimentos.chapisco,
+      embocoCimentoAreia: precosBase.revestimentos.emboco,
+      revestimentoCeramico: precosBase.revestimentos.ceramicaParede,
+      rejuntamentoPorcelanato: precosBase.revestimentos.rejuntamento,
     },
     teto: {
-      gessoConvencionalForro: 42.9,
+      gessoConvencionalForro: precosBase.revestimentos.gessoForro,
     },
     pisos: {
-      concretoNaoEstruturalLastro: 205.5,
-      regularizacaoBase: 14.5,
-      revestimentoCeramico: 80.0,
-      rejuntamentoPorcelanato: 8.8,
+      concretoNaoEstruturalLastro: precosBase.revestimentos.concretoLastro,
+      regularizacaoBase: precosBase.revestimentos.regularizacaoBase,
+      revestimentoCeramico: precosBase.revestimentos.ceramicaPiso,
+      rejuntamentoPorcelanato: precosBase.revestimentos.rejuntamento,
     },
   },
   instalacaoHidraulica: {
-    tuboPVC50mm: 22.59,
-    tuboPVC32mm: 15.93,
-    tuboPVC25mm: 14.56,
-    caixaDagua1500L: 220.0,
-    flange2pol: 30.0,
-    flange1pol: 30.0,
-    registroGaveta: 30.0,
-    registroGavetaCanopla: 30.0,
-    registroPressaoChuveiro: 30.0,
-    boiaMecanica: 30.0,
-    bancadaGranitoLavatorio: 110.0,
-    baciaSanitaria: 60.0,
-    chuveiroArticulado: 10.0,
-    bancadaGranitoCozinha: 110.0,
-    tanqueInox: 110.0,
+    tuboPVC50mm: precosBase.hidraulica.tuboPVC50mm,
+    tuboPVC32mm: precosBase.hidraulica.tuboPVC32mm,
+    tuboPVC25mm: precosBase.hidraulica.tuboPVC25mm,
+    caixaDagua1500L: precosBase.hidraulica.caixaDagua,
+    flange2pol: precosBase.hidraulica.flange,
+    flange1pol: precosBase.hidraulica.flange,
+    registroGaveta: precosBase.hidraulica.registro,
+    registroGavetaCanopla: precosBase.hidraulica.registro,
+    registroPressaoChuveiro: precosBase.hidraulica.registro,
+    boiaMecanica: precosBase.hidraulica.boiaMecanica,
+    bancadaGranitoLavatorio: precosBase.hidraulica.bancadaGranito,
+    baciaSanitaria: precosBase.hidraulica.baciaSanitaria,
+    chuveiroArticulado: precosBase.hidraulica.chuveiro,
+    bancadaGranitoCozinha: precosBase.hidraulica.bancadaGranito,
+    tanqueInox: precosBase.hidraulica.tanqueInox,
     duchaHigienica: 20.0,
   },
   instalacaoSanitaria: {
-    caixaInspecao60x60: 255.5,
-    tuboPVCEsgoto75mm: 26.5,
-    tuboPVCEsgoto50mm: 29.9,
-    raloSifonado: 40.0,
+    caixaInspecao60x60: precosBase.sanitaria.caixaInspecao,
+    tuboPVCEsgoto75mm: precosBase.sanitaria.tuboPVC75mm,
+    tuboPVCEsgoto50mm: precosBase.sanitaria.tuboPVC50mm,
+    raloSifonado: precosBase.sanitaria.raloSifonado,
   },
   instalacaoEletrica: {
-    quadroDistribuicao12: 90.0,
-    eletrodutoRigido32mm: 14.89,
-    eletrodutoFlexivel: 13.45,
-    caixaLigacaoPVC4x4: 4.5,
-    caboIsoladoPVC1_5mm: 3.0,
-    caboIsoladoPVC2_5mm: 4.5,
-    caboIsoladoPVC4mm: 4.5,
-    caboIsoladoPVC10mm: 5.0,
-    disjuntor15A: 20.0,
-    disjuntor20A: 20.0,
-    disjuntor32A: 20.0,
-    disjuntor50A: 20.0,
-    hasteCobre: 30.0,
-    interruptorTriplo: 12.0,
-    interruptorDuplo: 12.0,
-    interruptorCampainha: 12.0,
-    tomadaTripla: 12.0,
-    pontoLogica: 80.0,
-    pontoTV: 80.0,
-    luminariaLED: 30.0,
+    quadroDistribuicao12: precosBase.eletrica.quadroDistribuicao,
+    eletrodutoRigido32mm: precosBase.eletrica.eletrodutoRigido,
+    eletrodutoFlexivel: precosBase.eletrica.eletrodutoFlexivel,
+    caixaLigacaoPVC4x4: precosBase.eletrica.caixaPVC,
+    caboIsoladoPVC1_5mm: precosBase.eletrica.caboPVC1_5mm,
+    caboIsoladoPVC2_5mm: precosBase.eletrica.caboPVC2_5mm,
+    caboIsoladoPVC4mm: precosBase.eletrica.caboPVC4mm,
+    caboIsoladoPVC10mm: precosBase.eletrica.caboPVC10mm,
+    disjuntor15A: precosBase.eletrica.disjuntor,
+    disjuntor20A: precosBase.eletrica.disjuntor,
+    disjuntor32A: precosBase.eletrica.disjuntor,
+    disjuntor50A: precosBase.eletrica.disjuntor,
+    hasteCobre: precosBase.eletrica.hasteCobre,
+    interruptorTriplo: precosBase.eletrica.interruptor,
+    interruptorDuplo: precosBase.eletrica.interruptor,
+    interruptorCampainha: precosBase.eletrica.interruptor,
+    tomadaTripla: precosBase.eletrica.tomada,
+    pontoLogica: precosBase.eletrica.pontoLogica,
+    pontoTV: precosBase.eletrica.pontoTV,
+    luminariaLED: precosBase.eletrica.luminaria,
   },
   gasGlp: {
-    tuboCobre15mm: 35.0,
-    testeEstanqueidade: 1200.0,
+    tuboCobre15mm: precosBase.gasGLP.tuboCobre,
+    testeEstanqueidade: precosBase.gasGLP.testeEstanqueidade,
   },
   pintura: {
-    texturaExterna: 15.5,
-    emassamento: 10.0,
-    pinturaLatexPVA: 10.0,
-    seladorMadeira: 10.0,
-    esmalteSintetico: 10.0,
+    texturaExterna: precosBase.pintura.texturaExterna,
+    emassamento: precosBase.pintura.emassamento,
+    pinturaLatexPVA: precosBase.pintura.latexInterno,
+    seladorMadeira: precosBase.pintura.seladorMadeira,
+    esmalteSintetico: precosBase.pintura.esmalteSintetico,
   },
   churrasqueira: {
-    churrasqueiraMediaPorte: 2100.0,
+    churrasqueiraMediaPorte: precosBase.churrasqueira.churrasqueiraMediaPorte,
   },
   limpezaObra: {
-    transporteHorizontal: 56.6,
-    limpezaGeral: 1500.0,
+    transporteHorizontal: precosBase.limpeza.transporteHorizontal,
+    limpezaGeral: precosBase.limpeza.limpezaGeral,
   },
 };
 
