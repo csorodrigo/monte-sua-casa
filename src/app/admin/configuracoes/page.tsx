@@ -119,7 +119,7 @@ export default function ConfiguracoesPage() {
     carregarConfiguracoes();
   }, [carregarConfiguracoes]);
 
-  const salvarItem = async (secao: string, itemId: number, dados: Record<string, unknown>) => {
+  const salvarItem = async (secao: string, itemId: number, dados: Estado | TipoTelhado | TipoTijolo | TipoJanela | PadraoAcabamento) => {
     if (!senha) return;
 
     setSalvando(true);
@@ -148,7 +148,7 @@ export default function ConfiguracoesPage() {
     }
   };
 
-  const adicionarItem = async (secao: string, dados: Record<string, unknown>) => {
+  const adicionarItem = async (secao: string, dados: Partial<Estado | TipoTelhado | TipoTijolo | TipoJanela | PadraoAcabamento>) => {
     if (!senha) return;
 
     setSalvando(true);
