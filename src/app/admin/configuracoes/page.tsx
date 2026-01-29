@@ -119,7 +119,7 @@ export default function ConfiguracoesPage() {
     carregarConfiguracoes();
   }, [carregarConfiguracoes]);
 
-  const salvarItem = async (secao: string, itemId: number, dados: Estado | TipoTelhado | TipoTijolo | TipoJanela | PadraoAcabamento) => {
+  const salvarItem = async (secao: string, itemId: number, dados: Partial<Estado> | Partial<TipoTelhado> | Partial<TipoTijolo> | Partial<TipoJanela> | Partial<PadraoAcabamento>) => {
     if (!senha) return;
 
     setSalvando(true);
