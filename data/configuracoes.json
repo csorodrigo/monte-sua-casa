@@ -1,0 +1,294 @@
+{
+  "versao": "2026-01-29",
+  "ultimaAtualizacao": "2026-01-29T13:00:00.000Z",
+
+  "fatorINCC": 0.0079,
+
+  "estados": [
+    { "id": 1, "nome": "Acre", "sigla": "AC", "cub": 2128.89 },
+    { "id": 2, "nome": "Alagoas", "sigla": "AL", "cub": 1845.22 },
+    { "id": 3, "nome": "Amapá", "sigla": "AP", "cub": 2130.55 },
+    { "id": 4, "nome": "Amazonas", "sigla": "AM", "cub": 2578.22 },
+    { "id": 5, "nome": "Bahia", "sigla": "BA", "cub": 1968.22 },
+    { "id": 6, "nome": "Brasília", "sigla": "DF", "cub": 2168.80 },
+    { "id": 7, "nome": "Ceará", "sigla": "CE", "cub": 1931.66 },
+    { "id": 8, "nome": "Espírito Santo", "sigla": "ES", "cub": 2515.54 },
+    { "id": 9, "nome": "Goiás", "sigla": "GO", "cub": 1933.98 },
+    { "id": 10, "nome": "Maranhão", "sigla": "MA", "cub": 1690.55 },
+    { "id": 11, "nome": "Mato Grosso", "sigla": "MT", "cub": 2855.00 },
+    { "id": 12, "nome": "Mato Grosso do Sul", "sigla": "MS", "cub": 1672.55 },
+    { "id": 13, "nome": "Minas Gerais", "sigla": "MG", "cub": 2243.87 },
+    { "id": 14, "nome": "Pará", "sigla": "PA", "cub": 2111.88 },
+    { "id": 15, "nome": "Paraíba", "sigla": "PB", "cub": 1629.54 },
+    { "id": 16, "nome": "Paraná", "sigla": "PR", "cub": 2437.57 },
+    { "id": 17, "nome": "Pernambuco", "sigla": "PE", "cub": 2056.27 },
+    { "id": 18, "nome": "Piauí", "sigla": "PI", "cub": 1690.58 },
+    { "id": 19, "nome": "Rio Grande do Norte", "sigla": "RN", "cub": 1973.90 },
+    { "id": 20, "nome": "Rio Grande do Sul", "sigla": "RS", "cub": 2550.45 },
+    { "id": 21, "nome": "Rio de Janeiro", "sigla": "RJ", "cub": 2304.79 },
+    { "id": 22, "nome": "Rondônia", "sigla": "RO", "cub": 2130.58 },
+    { "id": 23, "nome": "Roraima", "sigla": "RR", "cub": 2419.58 },
+    { "id": 24, "nome": "São Paulo", "sigla": "SP", "cub": 2040.58 },
+    { "id": 25, "nome": "Santa Catarina", "sigla": "SC", "cub": 2872.48 },
+    { "id": 26, "nome": "Sergipe", "sigla": "SE", "cub": 2055.47 },
+    { "id": 27, "nome": "Tocantins", "sigla": "TO", "cub": 1934.12 }
+  ],
+
+  "tiposTelhado": [
+    { "id": 1, "nome": "LAJE IMPERMEABILIZADA", "precoMaterial": 175, "precoMaoObra": 60 },
+    { "id": 2, "nome": "TELHA CERÂMICA", "precoMaterial": 150, "precoMaoObra": 55 },
+    { "id": 3, "nome": "TELHA DE FIBROCIMENTO", "precoMaterial": 120, "precoMaoObra": 45 },
+    { "id": 4, "nome": "TELHA METÁLICA", "precoMaterial": 100, "precoMaoObra": 40 },
+    { "id": 5, "nome": "TELHA DE CONCRETO", "precoMaterial": 160, "precoMaoObra": 58 }
+  ],
+
+  "tiposTijolo": [
+    { "id": 1, "nome": "Tijolo Cerâmico (9x19x19)", "preco": 62.98, "consumoPorM2": 25 },
+    { "id": 2, "nome": "Bloco de Concreto (14x19x39)", "preco": 75.50, "consumoPorM2": 12.5 },
+    { "id": 3, "nome": "Tijolo Baiano (9x19x29)", "preco": 55.00, "consumoPorM2": 18 },
+    { "id": 4, "nome": "Bloco Cerâmico (14x19x29)", "preco": 68.00, "consumoPorM2": 15 },
+    { "id": 5, "nome": "Tijolo Maciço", "preco": 85.00, "consumoPorM2": 70 }
+  ],
+
+  "tiposJanela": [
+    { "id": 1, "nome": "Alumínio e vidro", "preco": 530 },
+    { "id": 2, "nome": "Madeira e vidro", "preco": 450 },
+    { "id": 3, "nome": "PVC e vidro", "preco": 480 },
+    { "id": 4, "nome": "Ferro e vidro", "preco": 350 }
+  ],
+
+  "padroesAcabamento": [
+    {
+      "id": 1,
+      "nome": "LUXO",
+      "multiplicador": 1.5,
+      "precoRevestimentoParede": 125,
+      "precoRevestimentoPiso": 120,
+      "precoPortaEntrada": 6500
+    },
+    {
+      "id": 2,
+      "nome": "ALTO PADRÃO",
+      "multiplicador": 1.2,
+      "precoRevestimentoParede": 95,
+      "precoRevestimentoPiso": 90,
+      "precoPortaEntrada": 4500
+    },
+    {
+      "id": 3,
+      "nome": "MÉDIO PADRÃO",
+      "multiplicador": 1.0,
+      "precoRevestimentoParede": 80,
+      "precoRevestimentoPiso": 75,
+      "precoPortaEntrada": 3000
+    },
+    {
+      "id": 4,
+      "nome": "BAIXO PADRÃO",
+      "multiplicador": 0.72,
+      "precoRevestimentoParede": 70,
+      "precoRevestimentoPiso": 65,
+      "precoPortaEntrada": 1500
+    }
+  ],
+
+  "precosBaseMateriais": {
+    "movimentoTerra": {
+      "escavacaoValas": 37.50,
+      "escavacaoFundacao": 37.50,
+      "reterroCompactacao": 25.45,
+      "espalhamentoBase": 23.90,
+      "apiloamentoFundo": 27.50
+    },
+    "baldrame": {
+      "alvenariaPedra": 543.91,
+      "cintaConcreto": 1250.50,
+      "impermeabilizacao": 19.90
+    },
+    "estrutura": {
+      "concretoPilaresVigas": 595.50,
+      "formaDesforma": 159.08,
+      "armaduraCA50": 16.90,
+      "lancamentoConcreto": 159.08,
+      "lajePrefabricada": 130.01
+    },
+    "esquadrias": {
+      "portaEntradaBase": 1500,
+      "portaMadeiraLei": 1094.65,
+      "cobogoAntiChuva": 20
+    },
+    "revestimentos": {
+      "chapisco": 7.97,
+      "reboco": 38.90,
+      "emboco": 34.75,
+      "rejuntamento": 10,
+      "bancadaCozinha": 800,
+      "gessoForro": 59.90,
+      "concretoLastro": 299,
+      "regularizacaoBase": 21.90,
+      "soleirasGranito": 150
+    },
+    "hidraulica": {
+      "tuboPVC50mm": 39.90,
+      "tuboPVC32mm": 28.90,
+      "tuboPVC25mm": 24.03,
+      "caixaDagua1500L": 1350,
+      "flange2pol": 100,
+      "flange1pol": 85,
+      "registroGaveta2pol": 167.26,
+      "registroGavetaCanopla": 100.64,
+      "registroPressaoChuveiro": 105.53,
+      "boiaMecanica": 55.89,
+      "torneiraJardim": 57.60,
+      "bancadaGranitoLavatorio": 1300,
+      "baciaSanitaria": 661.67,
+      "chuveiroArticulado": 195,
+      "bancadaGranitoCozinha": 1500,
+      "tanqueInox": 744.50
+    },
+    "sanitaria": {
+      "caixaInspecao60x60": 399,
+      "tuboPVC100mm": 52.14,
+      "tuboPVC75mm": 42.37,
+      "tuboPVC50mm": 29.90,
+      "raloSifonado": 75
+    },
+    "eletrica": {
+      "quadroDistribuicao12": 415,
+      "eletrodutoRigido32mm": 27.62,
+      "eletrodutoFlexivel": 26.40,
+      "caixaPVC4x4": 11.18,
+      "caixaPVC4x2": 8.85,
+      "caboPVC1_5mm": 3.99,
+      "caboPVC2_5mm": 7.17,
+      "caboPVC4mm": 7.99,
+      "caboPVC10mm": 15.80,
+      "disjuntor15A": 75,
+      "disjuntor20A": 75,
+      "disjuntor32A": 75,
+      "disjuntor50A": 75,
+      "hasteCobre": 180,
+      "interruptorTriplo": 48,
+      "interruptorDuplo": 31.23,
+      "interruptorCampainha": 25.67,
+      "tomadaTripla": 35.78,
+      "pontoLogica": 215.50,
+      "pontoTV": 215.50,
+      "luminariaLED": 105.50
+    },
+    "gasGLP": {
+      "tuboCobre15mm": 180,
+      "testeEstanqueidadePequeno": 450,
+      "testeEstanqueidadeGrande": 900
+    },
+    "pintura": {
+      "texturaExterna": 27.60,
+      "emassamento": 15.55,
+      "latexInterno": 18.80,
+      "seladorMadeira": 15.75,
+      "esmalteSintetico": 17.67
+    },
+    "churrasqueira": {
+      "churrasqueiraMediaPorte": 3650
+    },
+    "limpeza": {
+      "containers": 360,
+      "transporteHorizontal": 56.60,
+      "limpezaGeral": 14.50
+    }
+  },
+
+  "precosBaseMaoObra": {
+    "movimentoTerra": {
+      "escavacaoValas": 37.50,
+      "escavacaoFundacao": 37.50,
+      "reterroCompactacao": 25.45,
+      "espalhamentoBase": 23.90,
+      "apiloamentoFundo": 27.50
+    },
+    "baldrame": {
+      "alvenariaPedra": 311.50,
+      "cintaConcreto": 635.44,
+      "impermeabilizacao": 8.80,
+      "alvenariaTijolo": 41.50
+    },
+    "estrutura": {
+      "concretoPilaresVigas": 205.50,
+      "formaDesforma": 11.20,
+      "armaduraCA50": 4.10,
+      "lancamentoConcreto": 159.08,
+      "lajePrefabricada": 14.91
+    },
+    "esquadrias": {
+      "portaEntrada": 550,
+      "portaMadeiraLei": 130,
+      "cobogoAntiChuva": 10
+    },
+    "revestimentos": {
+      "chapisco": 5.58,
+      "reboco": 21.90,
+      "emboco": 15.90,
+      "ceramicaParede": 80,
+      "rejuntamento": 8.80,
+      "gessoForro": 42.90,
+      "concretoLastro": 205.50,
+      "regularizacaoBase": 14.50,
+      "ceramicaPiso": 80,
+      "soleirasGranito": 33
+    },
+    "hidraulica": {
+      "tuboPVC50mm": 22.59,
+      "tuboPVC32mm": 15.93,
+      "tuboPVC25mm": 14.56,
+      "caixaDagua": 220,
+      "flange": 30,
+      "registro": 30,
+      "boiaMecanica": 30,
+      "bancadaGranito": 110,
+      "baciaSanitaria": 60,
+      "chuveiro": 10,
+      "tanqueInox": 110
+    },
+    "sanitaria": {
+      "caixaInspecao": 255.50,
+      "tuboPVC75mm": 26.50,
+      "tuboPVC50mm": 29.90,
+      "raloSifonado": 40
+    },
+    "eletrica": {
+      "quadroDistribuicao": 90,
+      "eletrodutoRigido": 14.89,
+      "eletrodutoFlexivel": 13.45,
+      "caixaPVC": 4.50,
+      "caboPVC1_5mm": 3,
+      "caboPVC2_5mm": 4.50,
+      "caboPVC4mm": 4.50,
+      "caboPVC10mm": 5,
+      "disjuntor": 20,
+      "hasteCobre": 30,
+      "interruptor": 12,
+      "tomada": 12,
+      "pontoLogica": 80,
+      "pontoTV": 80,
+      "luminaria": 30
+    },
+    "gasGLP": {
+      "tuboCobre": 35,
+      "testeEstanqueidade": 1200
+    },
+    "pintura": {
+      "texturaExterna": 15.50,
+      "emassamento": 10,
+      "latexInterno": 10,
+      "seladorMadeira": 10,
+      "esmalteSintetico": 10
+    },
+    "churrasqueira": {
+      "churrasqueiraMediaPorte": 2100
+    },
+    "limpeza": {
+      "transporteHorizontal": 56.60,
+      "limpezaGeral": 1500
+    }
+  }
+}

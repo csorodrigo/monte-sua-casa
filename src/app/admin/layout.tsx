@@ -12,7 +12,8 @@ import {
   ArrowLeft,
   LogOut,
   Menu,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -79,7 +80,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const navItems = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/precos', label: 'Preços', icon: DollarSign },
+    { href: '/admin/configuracoes', label: 'Configurações', icon: Settings },
+    { href: '/admin/precos', label: 'Preços Base', icon: DollarSign },
     { href: '/admin/precos/importar', label: 'Importar Excel', icon: Upload },
   ];
 
