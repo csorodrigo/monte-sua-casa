@@ -1,5 +1,5 @@
 // Calculo completo do orcamento da casa
-// Fórmula de mão de obra: CUB_Estado × multiplicadorAcabamento
+// Fórmula de mão de obra: Usa cálculo detalhado de mao-de-obra-casa.ts com BDI 14.40%
 
 import {
   Comodo,
@@ -23,6 +23,7 @@ import {
   dimensoesExternas,
 } from './area';
 import { calcularEstrutura } from './estrutura';
+import { calcularMaoObraCasaDetalhada, ParametrosMaoObraCasa } from './mao-de-obra-casa';
 
 interface ParametrosCasa {
   comodos: Comodo[];
@@ -31,6 +32,9 @@ interface ParametrosCasa {
   padraoAcabamento: PadraoAcabamento;
   estado: Estado;
   reboco: ConfiguracaoReboco;
+  incluirChurrasqueira?: boolean;
+  temPortaDecorativa?: boolean;
+  profundidadeFundos?: number; // metros do fundo do lote (D11)
 }
 
 interface ResultadoCasa {
@@ -202,35 +206,96 @@ function calcularAcabamento(
 }
 
 /**
- * Calcula orcamento de mao de obra
- * Usa CUB do estado como base
+ * Converte SecaoOrcamentoDetalhado para SecaoOrcamento
+ * Adaptador para manter compatibilidade com a interface existente
+ */
+function converterSecaoDetalhada(secaoDetalhada: { codigo: string; nome: string; itens: Array<{ codigo: string; descricao: string; unidade: string; quantidade: number; precoUnitario: number; total: number }>; subtotal: number }): SecaoOrcamento {
+  return {
+    nome: `${secaoDetalhada.codigo} - ${secaoDetalhada.nome}`,
+    itens: secaoDetalhada.itens.map(item => ({
+      descricao: item.descricao,
+      quantidade: item.quantidade,
+      unidade: item.unidade,
+      precoUnitario: item.precoUnitario,
+      total: item.total,
+    })),
+    subtotal: secaoDetalhada.subtotal,
+  };
+}
+
+/**
+ * Calcula orcamento de mao de obra usando cálculo detalhado
+ * Retorna uma seção consolidada para compatibilidade com a UI existente
  */
 function calcularMaoObraCasa(
-  areaTotal: number,
-  estado: Estado,
-  padraoAcabamento: PadraoAcabamento
-): SecaoOrcamento {
-  // Usa CUB do estado se disponível, senão usa custoMaoObraPorM2 para compatibilidade
-  const cubEstado = estado.cub || estado.custoMaoObraPorM2 / 0.48;
-  const cubBase = getCUBBase();
-  const fatorEstado = cubEstado / cubBase;
+  params: ParametrosMaoObraCasa
+): { consolidada: SecaoOrcamento; detalhada: ReturnType<typeof calcularMaoObraCasaDetalhada> } {
+  const maoObraDetalhada = calcularMaoObraCasaDetalhada(params);
 
-  // Custo base por m² ajustado pelo estado e padrão de acabamento
-  const custoBasePorM2 = 200; // Valor base de mão de obra por m²
-  const custoAjustado = custoBasePorM2 * fatorEstado * padraoAcabamento.multiplicadorPreco;
+  // Cria uma seção consolidada para compatibilidade
+  const consolidada = criarSecao('M.O. Casa (Detalhada)', [
+    criarItem('Movimento de Terra', 1, 'vb', maoObraDetalhada.movimentoTerra.subtotal),
+    criarItem('Baldrame e Alvenaria', 1, 'vb', maoObraDetalhada.baldrameAlvenaria.subtotal),
+    criarItem('Fundações e Estruturas', 1, 'vb', maoObraDetalhada.fundacoesEstruturas.subtotal),
+    criarItem('Esquadrias e Ferragens', 1, 'vb', maoObraDetalhada.esquadriasFerragens.subtotal),
+    criarItem('Cobertura', 1, 'vb', maoObraDetalhada.cobertura.subtotal),
+    criarItem('Revestimentos', 1, 'vb', maoObraDetalhada.revestimentos.subtotal),
+    criarItem('Instalação Hidráulica', 1, 'vb', maoObraDetalhada.instalacaoHidraulica.subtotal),
+    criarItem('Instalação Sanitária', 1, 'vb', maoObraDetalhada.instalacaoSanitaria.subtotal),
+    criarItem('Instalação Elétrica', 1, 'vb', maoObraDetalhada.instalacaoEletrica.subtotal),
+    criarItem('Gás GLP', 1, 'vb', maoObraDetalhada.gasGlp.subtotal),
+    criarItem('Pintura', 1, 'vb', maoObraDetalhada.pintura.subtotal),
+    criarItem('Churrasqueira', 1, 'vb', maoObraDetalhada.churrasqueira.subtotal),
+    criarItem('Limpeza da Obra', 1, 'vb', maoObraDetalhada.limpezaObra.subtotal),
+    criarItem(`BDI (${maoObraDetalhada.bdiPercentual}%)`, 1, 'vb', maoObraDetalhada.bdi),
+  ]);
 
-  const itens: ItemOrcamento[] = [
-    criarItem(`Mao de obra casa (${estado.sigla})`, areaTotal, 'm2', custoAjustado),
-  ];
+  // Ajusta o subtotal para incluir o BDI
+  consolidada.subtotal = maoObraDetalhada.totalGeral;
 
-  return criarSecao('M.O. Casa', itens);
+  return { consolidada, detalhada: maoObraDetalhada };
+}
+
+/**
+ * Calcula quantidade de cômodos por tipo a partir da lista de cômodos
+ */
+function contarComodos(comodos: Comodo[]): { total: number; banheiros: number; quartos: number; portas: number } {
+  let banheiros = 0;
+  let quartos = 0;
+
+  for (const comodo of comodos) {
+    const nomeLower = comodo.nome.toLowerCase();
+    if (nomeLower.includes('banheiro') || nomeLower.includes('lavabo') || nomeLower.includes('wc')) {
+      banheiros++;
+    }
+    if (nomeLower.includes('quarto') || nomeLower.includes('dormit') || nomeLower.includes('suite')) {
+      quartos++;
+    }
+  }
+
+  // Total de cômodos
+  const total = comodos.length;
+  // Portas = quartos + banheiros + 2 (cozinha, área serviço, etc.)
+  const portas = quartos + banheiros + 2;
+
+  return { total, banheiros, quartos, portas };
 }
 
 /**
  * Calcula o orcamento completo da casa
  */
 export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
-  const { comodos, tipoTelhado, tipoTijolo, padraoAcabamento, estado, reboco } = params;
+  const {
+    comodos,
+    tipoTelhado,
+    tipoTijolo,
+    padraoAcabamento,
+    estado,
+    reboco,
+    incluirChurrasqueira = false,
+    temPortaDecorativa = false,
+    profundidadeFundos = 6, // valor padrão de 6 metros
+  } = params;
 
   // Calculos de area
   const areaTotal = areaTotalConstruida(comodos);
@@ -239,14 +304,40 @@ export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
   const dimensoes = dimensoesExternas(comodos);
   const perimetro = dimensoes.perimetroExterno;
 
-  // Calcular cada secao
+  // Calcular quantidades de cômodos
+  const contagem = contarComodos(comodos);
+
+  // Calcular cada secao de materiais
   const fundacao = calcularFundacao(perimetro, areaTotal);
   const estrutura = calcularEstruturaOrcamento(areaTotal, perimetro, tipoTijolo);
   const alvenaria = calcularAlvenaria(areaParedes, tipoTijolo);
   const telhado = calcularTelhadoOrcamento(areaTelhadoCalc, tipoTelhado);
   const rebocoSecao = calcularReboco(areaParedes, reboco);
   const acabamento = calcularAcabamento(areaTotal, areaParedes, padraoAcabamento);
-  const maoObraCasa = calcularMaoObraCasa(areaTotal, estado, padraoAcabamento);
+
+  // Parâmetros para cálculo detalhado de mão de obra
+  const qtdPilares = Math.ceil(areaTotal / 12); // 1 pilar a cada 12m²
+  const paramsMaoObra: ParametrosMaoObraCasa = {
+    areaTotal,
+    perimetroExterno: perimetro,
+    areaParedes,
+    areaTelhado: areaTelhadoCalc,
+    qtdPilares,
+    qtdBanheiros: contagem.banheiros || 1, // mínimo 1 banheiro
+    qtdQuartos: contagem.quartos || 1, // mínimo 1 quarto
+    estado,
+    padraoAcabamento,
+    incluirChurrasqueira,
+    temPortaDecorativa,
+    qtdComodos: contagem.total || 5, // mínimo 5 cômodos
+    qtdPortas: contagem.portas || 5,
+    larguraCasa: dimensoes.largura,
+    comprimentoCasa: dimensoes.comprimento,
+    profundidadeFundos,
+  };
+
+  // Calcular mão de obra detalhada
+  const { consolidada: maoObraCasa, detalhada: maoObraDetalhada } = calcularMaoObraCasa(paramsMaoObra);
 
   // Totais
   const totalMateriais =
@@ -275,6 +366,25 @@ export function calcularOrcamentoCasa(params: ParametrosCasa): ResultadoCasa {
       reboco: rebocoSecao,
       acabamento,
       maoObraCasa,
+      // Seções detalhadas de mão de obra (13 seções conforme planilha Excel)
+      maoObraMovimentoTerra: converterSecaoDetalhada(maoObraDetalhada.movimentoTerra),
+      maoObraBaldrameAlvenaria: converterSecaoDetalhada(maoObraDetalhada.baldrameAlvenaria),
+      maoObraFundacoesEstruturas: converterSecaoDetalhada(maoObraDetalhada.fundacoesEstruturas),
+      maoObraEsquadriasFerragens: converterSecaoDetalhada(maoObraDetalhada.esquadriasFerragens),
+      maoObraCobertura: converterSecaoDetalhada(maoObraDetalhada.cobertura),
+      maoObraRevestimentos: converterSecaoDetalhada(maoObraDetalhada.revestimentos),
+      maoObraInstalacaoHidraulica: converterSecaoDetalhada(maoObraDetalhada.instalacaoHidraulica),
+      maoObraInstalacaoSanitaria: converterSecaoDetalhada(maoObraDetalhada.instalacaoSanitaria),
+      maoObraInstalacaoEletrica: converterSecaoDetalhada(maoObraDetalhada.instalacaoEletrica),
+      maoObraGasGlp: converterSecaoDetalhada(maoObraDetalhada.gasGlp),
+      maoObraPintura: converterSecaoDetalhada(maoObraDetalhada.pintura),
+      maoObraChurrasqueira: converterSecaoDetalhada(maoObraDetalhada.churrasqueira),
+      maoObraLimpezaObra: converterSecaoDetalhada(maoObraDetalhada.limpezaObra),
+      // Totais de mão de obra detalhada
+      maoObraSubtotal: maoObraDetalhada.subtotal,
+      maoObraBdi: maoObraDetalhada.bdi,
+      maoObraBdiPercentual: maoObraDetalhada.bdiPercentual,
+      maoObraTotalGeral: maoObraDetalhada.totalGeral,
     },
   };
 }

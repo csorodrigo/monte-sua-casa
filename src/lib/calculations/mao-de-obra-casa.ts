@@ -19,8 +19,17 @@ interface ParametrosMaoObraCasa {
   estado: Estado;
   padraoAcabamento: PadraoAcabamento;
   incluirChurrasqueira: boolean;
-  temPortaDecorativa?: boolean; // Novo parâmetro opcional
+  temPortaDecorativa?: boolean;
+  // NOVOS parâmetros conforme planilha Excel
+  qtdComodos: number;          // E32 = 11 (soma de todos os cômodos)
+  qtdPortas: number;           // E34 = 9
+  larguraCasa: number;         // E38 = 6 (frente)
+  comprimentoCasa: number;     // E39 = 16.1 (fundo)
+  profundidadeFundos: number;  // D11 = 6 (metros do fundo do lote)
 }
+
+// Exportar a interface para uso em outros arquivos
+export type { ParametrosMaoObraCasa };
 
 export interface MaoObraCasaDetalhada {
   movimentoTerra: SecaoOrcamentoDetalhado;
@@ -91,6 +100,11 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
     padraoAcabamento,
     incluirChurrasqueira,
     temPortaDecorativa = false,
+    qtdComodos,
+    qtdPortas,
+    larguraCasa,
+    comprimentoCasa,
+    profundidadeFundos,
   } = params;
 
   // Fator de ajuste pelo estado baseado no CUB
@@ -101,8 +115,13 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   const mult = padraoAcabamento.multiplicadorPreco;
   const P = PRECOS_MAO_OBRA_CASA;
 
-  // Cálculos base derivados
-  const qtdPortasInternas = qtdQuartos + qtdBanheiros + 2; // Ex: 4+3+2 = 9
+  // =============================================
+  // Cálculos base derivados conforme planilha Excel
+  // =============================================
+  // Base hidráulica: F49 formula = (2 + banheiros + areaGourmet)
+  const baseHidraulica = 2 + qtdBanheiros + (incluirChurrasqueira ? 1 : 0);
+  // Quantidade de caixas d'água: IF(área > 100, 2, 1)
+  const qtdCaixaDagua = areaTotal > 100 ? 2 : 1;
 
   // =============================================
   // 3.1 MOVIMENTO DE TERRA
@@ -171,7 +190,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   const esquadriasFerragens = criarSecao('3.4', 'ESQUADRIAS E FERRAGENS', [
     // CORREÇÃO 3.4.1: Porta entrada só se temPortaDecorativa
     criarItem('3.4.1', 'Instalação porta entrada decorativa', 'unid', temPortaDecorativa ? 1 : 0, P.esquadriasFerragens.portaEntradaDecorativa * fatorEstado),
-    criarItem('3.4.2', 'Instalação portas internas', 'unid', qtdPortasInternas, P.esquadriasFerragens.portaMadeiraLei * fatorEstado),
+    criarItem('3.4.2', 'Instalação portas internas', 'unid', qtdPortas, P.esquadriasFerragens.portaMadeiraLei * fatorEstado),
     // NOVO 3.4.3: Esquadria de alumínio
     criarItem('3.4.3', 'Esquadria de alumínio e vidro', 'm²', areaJanelas, P.esquadriasFerragens.esquadriaAluminio * fatorEstado),
     criarItem('3.4.4', 'Instalação cobogó', 'unid', 3, P.esquadriasFerragens.cobogoAntiChuva * fatorEstado),
@@ -217,7 +236,7 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // CORREÇÃO 3.6.3.1: Lastro é em m³, não m²
   const volumeLastro = areaTotal * 0.05;
   // NOVO 3.6.3.5: Soleiras
-  const metrosSoleiras = qtdPortasInternas * 0.9;
+  const metrosSoleiras = qtdPortas * 0.9;
 
   const revestimentosPisos = criarSecao('3.6.3', 'PISOS', [
     criarItem('3.6.3.1', 'Contrapiso/lastro', 'm³', volumeLastro, P.revestimentos.pisos.concretoNaoEstruturalLastro * fatorEstado),
@@ -245,47 +264,66 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // =============================================
   // 3.7 INSTALAÇÃO HIDRÁULICA
   // Total esperado (ref): R$ 3.254,08
-  // CORREÇÃO COMPLETA: Fórmulas baseadas em banheiros
+  // CORREÇÃO COMPLETA: Fórmulas conforme planilha Excel
   // =============================================
-  const metrosTubo50Hidr = qtdBanheiros * 3;  // 3 × 3 = 9
-  const metrosTubo32 = qtdBanheiros * 12;     // 3 × 12 = 36
-  const metrosTubo25 = qtdBanheiros * 18;     // 3 × 18 = 54
+  // F48: Tubo 50mm = 9.0 (hardcoded)
+  const metrosTubo50Hidr = 9;
+  // F49: Tubo 32mm = (2 + banheiros + areaGourmet) × 6
+  const metrosTubo32 = baseHidraulica * 6; // (2+3+1)×6 = 36
+  // F50: Tubo 25mm = (2 + banheiros + areaGourmet) × 9
+  const metrosTubo25 = baseHidraulica * 9; // (2+3+1)×9 = 54
+  // F52-F53: Flanges baseadas em caixas d'água
+  const qtdFlange2pol = qtdCaixaDagua * 2;
+  const qtdFlange1pol = qtdCaixaDagua;
+  // F54: Registro bruto 2" = 3 (hardcoded)
+  const qtdRegistroBruto2pol = 3;
+  // F55: Registro gaveta = baseHidraulica
+  const qtdRegistroGaveta = baseHidraulica;
+  // F56: Registro chuveiro = banheiros
+  const qtdRegistroChuveiro = qtdBanheiros;
+  // F57: Boia = caixas d'água
+  const qtdBoia = qtdCaixaDagua;
+  // F62: Bancada cozinha = 1 + areaGourmet
+  const qtdBancadaCozinha = 1 + (incluirChurrasqueira ? 1 : 0);
 
   const instalacaoHidraulica = criarSecao('3.7', 'INSTALAÇÃO HIDRÁULICA', [
     criarItem('3.7.1', 'Tubo PVC soldável 50mm', 'm', metrosTubo50Hidr, P.instalacaoHidraulica.tuboPVC50mm * fatorEstado),
     criarItem('3.7.2', 'Tubo PVC soldável 32mm', 'm', metrosTubo32, P.instalacaoHidraulica.tuboPVC32mm * fatorEstado),
     criarItem('3.7.3', 'Tubo PVC soldável 25mm', 'm', metrosTubo25, P.instalacaoHidraulica.tuboPVC25mm * fatorEstado),
-    criarItem('3.7.4', 'Instalação caixa d\'água 1500L', 'unid', 1, P.instalacaoHidraulica.caixaDagua1500L * fatorEstado),
-    // NOVOS itens separados
-    criarItem('3.7.5', 'Flange 2"', 'unid', 2, P.instalacaoHidraulica.flange2pol * fatorEstado),
-    criarItem('3.7.6', 'Flange 1"', 'unid', 1, P.instalacaoHidraulica.flange1pol * fatorEstado),
-    criarItem('3.7.7', 'Registro gaveta 2"', 'unid', qtdBanheiros, P.instalacaoHidraulica.registroGaveta2pol * fatorEstado),
-    criarItem('3.7.8', 'Registro canopla 1/2"', 'unid', qtdBanheiros * 2, P.instalacaoHidraulica.registroGavetaCanopla * fatorEstado),
-    criarItem('3.7.9', 'Registro pressão chuveiro', 'unid', qtdBanheiros, P.instalacaoHidraulica.registroPressaoChuveiro * fatorEstado),
-    criarItem('3.7.10', 'Boia mecânica 3/4"', 'unid', 1, P.instalacaoHidraulica.boiaMecanica * fatorEstado),
+    criarItem('3.7.4', 'Instalação caixa d\'água 1500L', 'unid', qtdCaixaDagua, P.instalacaoHidraulica.caixaDagua1500L * fatorEstado),
+    criarItem('3.7.5', 'Flange 2"', 'unid', qtdFlange2pol, P.instalacaoHidraulica.flange2pol * fatorEstado),
+    criarItem('3.7.6', 'Flange 1"', 'unid', qtdFlange1pol, P.instalacaoHidraulica.flange1pol * fatorEstado),
+    criarItem('3.7.7', 'Registro bruto 2"', 'unid', qtdRegistroBruto2pol, P.instalacaoHidraulica.registroGaveta2pol * fatorEstado),
+    criarItem('3.7.8', 'Registro gaveta', 'unid', qtdRegistroGaveta, P.instalacaoHidraulica.registroGavetaCanopla * fatorEstado),
+    criarItem('3.7.9', 'Registro pressão chuveiro', 'unid', qtdRegistroChuveiro, P.instalacaoHidraulica.registroPressaoChuveiro * fatorEstado),
+    criarItem('3.7.10', 'Boia mecânica 3/4"', 'unid', qtdBoia, P.instalacaoHidraulica.boiaMecanica * fatorEstado),
     criarItem('3.7.11', 'Torneira jardim', 'unid', 2, P.instalacaoHidraulica.torneiraJardim * fatorEstado),
     criarItem('3.7.12', 'Bancada de granito lavatório', 'cj', qtdBanheiros, P.instalacaoHidraulica.bancadaGranitoLavatorio * fatorEstado * mult),
     criarItem('3.7.13', 'Bacia sanitária', 'unid', qtdBanheiros, P.instalacaoHidraulica.baciaSanitaria * fatorEstado),
     criarItem('3.7.14', 'Chuveiro articulado', 'unid', qtdBanheiros, P.instalacaoHidraulica.chuveiroArticulado * fatorEstado),
-    criarItem('3.7.15', 'Bancada cozinha', 'cj', 2, P.instalacaoHidraulica.bancadaGranitoCozinha * fatorEstado * mult),
+    criarItem('3.7.15', 'Bancada cozinha', 'cj', qtdBancadaCozinha, P.instalacaoHidraulica.bancadaGranitoCozinha * fatorEstado * mult),
     criarItem('3.7.17', 'Tanque', 'cj', 1, P.instalacaoHidraulica.tanqueInox * fatorEstado),
-    // NOVO 3.7.18: Ducha higiênica
     criarItem('3.7.18', 'Ducha higiênica', 'unid', qtdBanheiros, P.instalacaoHidraulica.duchaHigienica * fatorEstado),
   ]);
 
   // =============================================
   // 3.8 INSTALAÇÃO SANITÁRIA
   // Total esperado (ref): R$ 4.018,64
-  // CORREÇÃO: Fórmulas baseadas em banheiros
+  // CORREÇÃO COMPLETA: Fórmulas conforme planilha Excel
   // =============================================
-  const metrosTubo100 = qtdBanheiros * 2;   // 3 × 2 = 6
-  const metrosTubo75 = qtdBanheiros * 12;   // 3 × 12 = 36
-  const metrosTubo50San = qtdBanheiros * 18; // 3 × 18 = 54
-  const qtdRalos = qtdBanheiros * 2;        // 3 × 2 = 6
+  // F66: Caixa inspeção = 4 (hardcoded)
+  const qtdCaixaInspecao = 4;
+  // F67: Tubo 100mm = D11 (profundidade fundos)
+  const metrosTubo100 = profundidadeFundos;
+  // F68: Tubo 75mm = (2 + banheiros + areaGourmet) × 6
+  const metrosTubo75 = baseHidraulica * 6;
+  // F69: Tubo 50mm = (2 + banheiros + areaGourmet) × 9
+  const metrosTubo50San = baseHidraulica * 9;
+  // F70: Ralos = 2 + banheiros + areaGourmet
+  const qtdRalos = baseHidraulica;
 
   const instalacaoSanitaria = criarSecao('3.8', 'INSTALAÇÃO SANITÁRIA', [
-    criarItem('3.8.1', 'Caixas de inspeção', 'unid', 4, P.instalacaoSanitaria.caixaInspecao60x60 * fatorEstado),
-    // NOVO 3.8.2: Tubo 100mm
+    criarItem('3.8.1', 'Caixas de inspeção', 'unid', qtdCaixaInspecao, P.instalacaoSanitaria.caixaInspecao60x60 * fatorEstado),
     criarItem('3.8.2', 'Tubo esgoto 100mm', 'm', metrosTubo100, P.instalacaoSanitaria.tuboPVCEsgoto100mm * fatorEstado),
     criarItem('3.8.3', 'Tubo esgoto 75mm', 'm', metrosTubo75, P.instalacaoSanitaria.tuboPVCEsgoto75mm * fatorEstado),
     criarItem('3.8.5', 'Tubo esgoto 50mm', 'm', metrosTubo50San, P.instalacaoSanitaria.tuboPVCEsgoto50mm * fatorEstado),
@@ -295,49 +333,64 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // =============================================
   // 3.9 INSTALAÇÃO ELÉTRICA
   // Total esperado (ref): R$ 10.231,21
-  // CORREÇÃO COMPLETA: Fórmulas conforme planilha
+  // CORREÇÃO COMPLETA: Fórmulas conforme planilha Excel
   // =============================================
-  // Estimativa do comprimento da casa (proporção 6:16.1 ≈ 0.37)
-  const comprimentoCasa = Math.sqrt(areaTotal / 0.37);
-  const metrosEletrodutoRigido = comprimentoCasa; // ≈ 16
-  const metrosEletrodutoFlex = areaTotal * 2.5; // 96.6 × 2.5 = 241.5
-  const metrosCabo1_5mm = metrosEletrodutoFlex; // 241.5
-  const metrosCabo2_5mm = metrosEletrodutoFlex * 2; // 483
-  const metrosCabo4mm = metrosEletrodutoFlex * 0.5; // 120.75
-  const metrosCabo10mm = 18; // fixo
-  const qtdTomadas = Math.ceil(areaTotal * 0.5); // 96.6 × 0.5 = 48
-  const qtdCaixas4x2 = qtdTomadas + 8 + (qtdQuartos + qtdBanheiros + 2); // tomadas + interruptores
-  const qtdInterruptoresTriplo = 8; // fixo
-  const qtdInterruptoresDuplo = qtdQuartos + qtdBanheiros + 2; // 4+3+2 = 9
-  const qtdLuminarias = (qtdQuartos + qtdBanheiros + 5) * 3; // para dar ~33
+  // F73: Eletroduto rígido = E39 (comprimento casa)
+  const metrosEletrodutoRigido = comprimentoCasa;
+  // F74: Eletroduto flexível = área × 2.5
+  const metrosEletrodutoFlex = areaTotal * 2.5;
+  // F75: Caixa 4x4 = 5 (hardcoded)
+  const qtdCaixa4x4 = 5;
+  // F76: Caixa 4x2 = 6 × cômodos
+  const qtdCaixa4x2 = 6 * qtdComodos;
+  // F77-F80: Cabos
+  const metrosCabo1_5mm = metrosEletrodutoFlex;
+  const metrosCabo2_5mm = metrosCabo1_5mm * 2;
+  const metrosCabo4mm = metrosEletrodutoFlex * 0.5;
+  const metrosCabo10mm = profundidadeFundos * 3; // D11 × 3
+  // F81-F84: Disjuntores (hardcoded)
+  const qtdDisjuntor15A = 6;
+  const qtdDisjuntor20A = 6;
+  const qtdDisjuntor32A = 4;
+  const qtdDisjuntor50A = 2;
+  // F85: Haste cobre = 3 (hardcoded)
+  const qtdHasteCobre = 3;
+  // F86: Interruptor triplo = cômodos - banheiros
+  const qtdInterruptorTriplo = qtdComodos - qtdBanheiros;
+  // F87: Interruptor duplo = portas
+  const qtdInterruptorDuplo = qtdPortas;
+  // F88: Interruptor campainha = 1 (hardcoded)
+  const qtdInterruptorCampainha = 1;
+  // F89: Tomadas = caixas4x2 - (triplo + duplo + campainha)
+  const qtdTomadas = qtdCaixa4x2 - (qtdInterruptorTriplo + qtdInterruptorDuplo + qtdInterruptorCampainha);
+  // F90: Ponto lógica = 2 (hardcoded)
+  const qtdPontoLogica = 2;
+  // F91: Ponto TV = quartos + 1
+  const qtdPontoTV = qtdQuartos + 1;
+  // Luminárias = estimativa baseada em cômodos
+  const qtdLuminarias = qtdComodos * 3;
 
   const instalacaoEletrica = criarSecao('3.9', 'INSTALAÇÃO ELÉTRICA', [
     criarItem('3.9.1', 'Quadro de distribuição', 'unid', 1, P.instalacaoEletrica.quadroDistribuicao12 * fatorEstado),
     criarItem('3.9.2', 'Eletroduto rígido 32mm', 'm', metrosEletrodutoRigido, P.instalacaoEletrica.eletrodutoRigido32mm * fatorEstado),
     criarItem('3.9.3', 'Eletroduto flexível', 'm', metrosEletrodutoFlex, P.instalacaoEletrica.eletrodutoFlexivel * fatorEstado),
-    criarItem('3.9.4', 'Caixas 4x4', 'unid', 5, P.instalacaoEletrica.caixaLigacaoPVC4x4 * fatorEstado),
-    // NOVO 3.9.5: Caixas 4x2
-    criarItem('3.9.5', 'Caixas 4x2', 'unid', qtdCaixas4x2, P.instalacaoEletrica.caixaLigacaoPVC4x2 * fatorEstado),
+    criarItem('3.9.4', 'Caixas 4x4', 'unid', qtdCaixa4x4, P.instalacaoEletrica.caixaLigacaoPVC4x4 * fatorEstado),
+    criarItem('3.9.5', 'Caixas 4x2', 'unid', qtdCaixa4x2, P.instalacaoEletrica.caixaLigacaoPVC4x2 * fatorEstado),
     criarItem('3.9.6', 'Cabo 1,5mm', 'm', metrosCabo1_5mm, P.instalacaoEletrica.caboIsoladoPVC1_5mm * fatorEstado),
     criarItem('3.9.7', 'Cabo 2,5mm', 'm', metrosCabo2_5mm, P.instalacaoEletrica.caboIsoladoPVC2_5mm * fatorEstado),
     criarItem('3.9.8', 'Cabo 4mm', 'm', metrosCabo4mm, P.instalacaoEletrica.caboIsoladoPVC4mm * fatorEstado),
     criarItem('3.9.9', 'Cabo 10mm', 'm', metrosCabo10mm, P.instalacaoEletrica.caboIsoladoPVC10mm * fatorEstado),
-    // CORREÇÃO: Disjuntores separados por amperagem
-    criarItem('3.9.10', 'Disjuntor 15A', 'unid', 6, P.instalacaoEletrica.disjuntor15A * fatorEstado),
-    criarItem('3.9.11', 'Disjuntor 20A', 'unid', 6, P.instalacaoEletrica.disjuntor20A * fatorEstado),
-    criarItem('3.9.12', 'Disjuntor 32A', 'unid', 4, P.instalacaoEletrica.disjuntor32A * fatorEstado),
-    criarItem('3.9.13', 'Disjuntor 50A', 'unid', 2, P.instalacaoEletrica.disjuntor50A * fatorEstado),
-    // NOVO 3.9.14: Haste de cobre
-    criarItem('3.9.14', 'Haste de cobre', 'unid', 3, P.instalacaoEletrica.hasteCobre * fatorEstado),
-    // CORREÇÃO: Interruptores separados
-    criarItem('3.9.15', 'Interruptor triplo', 'unid', qtdInterruptoresTriplo, P.instalacaoEletrica.interruptorTriplo * fatorEstado),
-    criarItem('3.9.16', 'Interruptor duplo', 'unid', qtdInterruptoresDuplo, P.instalacaoEletrica.interruptorDuplo * fatorEstado),
-    // NOVO 3.9.18: Interruptor campainha
-    criarItem('3.9.18', 'Interruptor campainha', 'unid', 1, P.instalacaoEletrica.interruptorCampainha * fatorEstado),
+    criarItem('3.9.10', 'Disjuntor 15A', 'unid', qtdDisjuntor15A, P.instalacaoEletrica.disjuntor15A * fatorEstado),
+    criarItem('3.9.11', 'Disjuntor 20A', 'unid', qtdDisjuntor20A, P.instalacaoEletrica.disjuntor20A * fatorEstado),
+    criarItem('3.9.12', 'Disjuntor 32A', 'unid', qtdDisjuntor32A, P.instalacaoEletrica.disjuntor32A * fatorEstado),
+    criarItem('3.9.13', 'Disjuntor 50A', 'unid', qtdDisjuntor50A, P.instalacaoEletrica.disjuntor50A * fatorEstado),
+    criarItem('3.9.14', 'Haste de cobre', 'unid', qtdHasteCobre, P.instalacaoEletrica.hasteCobre * fatorEstado),
+    criarItem('3.9.15', 'Interruptor triplo', 'unid', qtdInterruptorTriplo, P.instalacaoEletrica.interruptorTriplo * fatorEstado),
+    criarItem('3.9.16', 'Interruptor duplo', 'unid', qtdInterruptorDuplo, P.instalacaoEletrica.interruptorDuplo * fatorEstado),
+    criarItem('3.9.18', 'Interruptor campainha', 'unid', qtdInterruptorCampainha, P.instalacaoEletrica.interruptorCampainha * fatorEstado),
     criarItem('3.9.19', 'Tomadas', 'unid', qtdTomadas, P.instalacaoEletrica.tomadaTripla * fatorEstado),
-    criarItem('3.9.20', 'Pontos de lógica', 'pt', 2, P.instalacaoEletrica.pontoLogica * fatorEstado),
-    // CORREÇÃO: Pontos TV = quartos + 1
-    criarItem('3.9.21', 'Pontos de TV', 'pt', qtdQuartos + 1, P.instalacaoEletrica.pontoTV * fatorEstado),
+    criarItem('3.9.20', 'Pontos de lógica', 'pt', qtdPontoLogica, P.instalacaoEletrica.pontoLogica * fatorEstado),
+    criarItem('3.9.21', 'Pontos de TV', 'pt', qtdPontoTV, P.instalacaoEletrica.pontoTV * fatorEstado),
     criarItem('3.9.22', 'Luminárias LED', 'unid', qtdLuminarias, P.instalacaoEletrica.luminariaLED * fatorEstado * mult),
   ]);
 
@@ -356,20 +409,32 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // =============================================
   // 3.11 PINTURA
   // Total esperado (ref): R$ 6.889,06
+  // CORREÇÃO COMPLETA: Fórmulas conforme planilha Excel
   // =============================================
-  // CORREÇÃO: Textura externa = paredes × 0.95 (descontando aberturas)
-  const areaPinturaExterna = areaParedes * 0.95;
-  // Emassamento/latex interno = paredes × 0.55 + teto
-  const areaPinturaInterna = (areaParedes * 0.55) + areaTotal;
-  // CORREÇÃO: Área madeira = portas × 4.1 m² por porta
-  const areaMadeira = qtdPortasInternas * 4.1;
+  // F97: Textura externa = (2 × (E38 + E39)) × 3.5
+  // = (2 × (largura + comprimento)) × 3.5 = perímetro × 3.5
+  const areaPinturaExterna = (2 * (larguraCasa + comprimentoCasa)) * 3.5;
+
+  // F98: Emassamento = F33 - F37 + F40 - F97
+  // = Chapisco - Rejuntamento + Gesso(área) - Textura
+  // Usamos os valores já calculados em revestimentos: areaChapisco e areaCeramicaParede
+  const areaEmassamento = areaChapisco - areaCeramicaParede + areaTotal - areaPinturaExterna;
+
+  // F99: Latex interno = emassamento
+  const areaLatexInterno = areaEmassamento;
+
+  // F100: Selador madeira = E34 × 4.1 (portas × 4.1)
+  const areaMadeira = qtdPortas * 4.1;
+
+  // F101: Esmalte = selador
+  const areaEsmalte = areaMadeira;
 
   const pintura = criarSecao('3.11', 'PINTURA', [
     criarItem('3.11.2', 'Textura externa', 'm²', areaPinturaExterna, P.pintura.texturaExterna * fatorEstado * mult),
-    criarItem('3.11.4', 'Emassamento', 'm²', areaPinturaInterna, P.pintura.emassamento * fatorEstado),
-    criarItem('3.11.5', 'Latex interno', 'm²', areaPinturaInterna, P.pintura.pinturaLatexPVA * fatorEstado * mult),
+    criarItem('3.11.4', 'Emassamento', 'm²', areaEmassamento, P.pintura.emassamento * fatorEstado),
+    criarItem('3.11.5', 'Latex interno', 'm²', areaLatexInterno, P.pintura.pinturaLatexPVA * fatorEstado * mult),
     criarItem('3.11.6', 'Selador em madeira', 'm²', areaMadeira, P.pintura.seladorMadeira * fatorEstado),
-    criarItem('3.11.7', 'Esmalte sintético', 'm²', areaMadeira, P.pintura.esmalteSintetico * fatorEstado * mult),
+    criarItem('3.11.7', 'Esmalte sintético', 'm²', areaEsmalte, P.pintura.esmalteSintetico * fatorEstado * mult),
   ]);
 
   // =============================================
@@ -385,13 +450,16 @@ export function calcularMaoObraCasaDetalhada(params: ParametrosMaoObraCasa): Mao
   // =============================================
   // 3.13 LIMPEZA DA OBRA
   // Total esperado (ref): R$ 2.632,17
-  // Limpeza geral é VERBA ÚNICA (1 vb), não por m²!
+  // CORREÇÃO COMPLETA: Fórmulas conforme planilha Excel
   // =============================================
-  const volumeEntulho = areaTotal * 0.2; // área × 0.2 conforme planilha
+  // F105: Transporte horizontal = 20.0 (HARDCODED!)
+  const volumeEntulho = 20;
+  // F106: Limpeza geral = 1 vb (hardcoded)
+  const limpezaGeral = 1;
 
   const limpezaObra = criarSecao('3.13', 'LIMPEZA DA OBRA', [
     criarItem('3.13.2', 'Transporte horizontal', 'm³', volumeEntulho, P.limpezaObra.transporteHorizontal * fatorEstado),
-    criarItem('3.13.3', 'Limpeza geral', 'vb', 1, P.limpezaObra.limpezaGeral * fatorEstado),
+    criarItem('3.13.3', 'Limpeza geral', 'vb', limpezaGeral, P.limpezaObra.limpezaGeral * fatorEstado),
   ]);
 
   // =============================================

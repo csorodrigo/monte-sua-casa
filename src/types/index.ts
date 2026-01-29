@@ -67,6 +67,25 @@ export interface BreakdownOrcamento {
   maoObraPiscina?: SecaoOrcamento;
   muro?: SecaoOrcamento;
   piscina?: SecaoOrcamento;
+  // Seções detalhadas de mão de obra (13 seções conforme planilha Excel)
+  maoObraMovimentoTerra?: SecaoOrcamento;
+  maoObraBaldrameAlvenaria?: SecaoOrcamento;
+  maoObraFundacoesEstruturas?: SecaoOrcamento;
+  maoObraEsquadriasFerragens?: SecaoOrcamento;
+  maoObraCobertura?: SecaoOrcamento;
+  maoObraRevestimentos?: SecaoOrcamento;
+  maoObraInstalacaoHidraulica?: SecaoOrcamento;
+  maoObraInstalacaoSanitaria?: SecaoOrcamento;
+  maoObraInstalacaoEletrica?: SecaoOrcamento;
+  maoObraGasGlp?: SecaoOrcamento;
+  maoObraPintura?: SecaoOrcamento;
+  maoObraChurrasqueira?: SecaoOrcamento;
+  maoObraLimpezaObra?: SecaoOrcamento;
+  // Totais de mão de obra detalhada
+  maoObraSubtotal?: number;
+  maoObraBdi?: number;
+  maoObraBdiPercentual?: number;
+  maoObraTotalGeral?: number;
 }
 
 export interface ResultadoOrcamento {
